@@ -30,7 +30,10 @@ def calc_kendall_tau(x, y):
    return discordant_pairs
 
 
-# recurcive function that makes n switches and calculates the max error based on current approximation
+# when given an approxamation it tries to maximize the distance with the real list by making at most n switches to it
+# prioritizes the permutations where the switches have been made at the higher rank, 
+# this is due to the for loop that loops through all permutations,
+# could try and see what happenens if we reverse the order and it prioritizes the bottom switches, this should be worse for our algorithm in theory
 def calc_max_error(approximation, currlist, n):
    all_permutations = [currlist]
    worst_case = currlist.copy()
@@ -58,23 +61,7 @@ def calc_max_error(approximation, currlist, n):
       if curr_distance > max_distance :
          max_distance = curr_distance
          worst_case = x.copy()
-         print(worst_case)
-         print("\n")
-         print(str(max_distance))
-         print("entered \n")
-
-   print("results: \n")
-   print(all_permutations)
-   print("\n")
-   print(worst_case)
-   print("\n")
-
-   print(str(max_distance))
    return worst_case
-
-
-#   if switches == 0:
-#      calc_kendall_tau()
 
 
 # writes the approximation and the corresponding step into a dir with the inputfile as name
