@@ -11,9 +11,8 @@ def blocksort():
 def quicksort():
    return ordered_list
 
+# writes the approximation and the corresponding step into a dir with the inputfile as name
 def record_approximation(list, curr_step):
-   # want to write the step and the approx into a map with the inputfile as name, so for example:
-   # for each step of input_file_size10.txt we write to a dir input_file_size10, stepi.txt for the ith approximation
    file = open("/home/yasin/Thesis/apprx_input_size" + str(len(list)) + "/step_" +  str(curr_step) + ".txt", "x")
    for i in range(0, len(list)):
       file.write(str(list[i]) + "\n")
