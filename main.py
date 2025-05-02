@@ -3,37 +3,16 @@ import matplotlib
 import pandas
 import os
 
-# implementation of blocksort
-def blocksort():
-   return ordered_list
 
 # implementation of quicksort
 def quicksort():
    return ordered_list
 
-# writes the approximation and the corresponding step into a dir with the inputfile as name
-def record_approximation(list, curr_step):
-   file = open("/home/yasin/Thesis/apprx_input_size" + str(len(list)) + "/step_" +  str(curr_step) + ".txt", "x")
-   for i in range(0, len(list)):
-      file.write(str(list[i]) + "\n")
 
+# implementation of blocksort
+def blocksort():
+   return ordered_list
 
-# used in order to create initial input files
-def create_input_file(input_size):
-   file = open("input_size" +  str(input_size) + ".txt", "x")
-   for i in range(0, input_size):
-      file.write(str(i + 1) + "\n")
-   os.mkdir("apprx_input_size" + str(input_size))
-
-# read from a file the input and return it as a list
-def read_input(file_name):
-   my_list = []
-
-   with open(file_name) as file:
-      for line in file:
-         line.replace("\n", "")
-         my_list.append(int(line))
-   return my_list
 
 # calculates the K error given two lists x and y
 def calc_kendall_tau(x, y):
@@ -57,23 +36,39 @@ def calc_max_error(approximation, currlist, switches):
      calc_kendall_tau()
 
 
+# writes the approximation and the corresponding step into a dir with the inputfile as name
+def record_approximation(list, curr_step):
+   file = open("/home/yasin/Thesis/apprx_input_size" + str(len(list)) + "/step_" +  str(curr_step) + ".txt", "x")
+   for i in range(0, len(list)):
+      file.write(str(list[i]) + "\n")
+
+
+# used in order to create initial input files
+def create_input_file(input_size):
+   file = open("input_size" +  str(input_size) + ".txt", "x")
+   for i in range(0, input_size):
+      file.write(str(i + 1) + "\n")
+   os.mkdir("apprx_input_size" + str(input_size))
+
+
+# read from a file the input and return it as a list
+def read_input(file_name):
+   my_list = []
+
+   with open(file_name) as file:
+      for line in file:
+         line.replace("\n", "")
+         my_list.append(int(line))
+   return my_list
+
+
+# deletes files, used for testing
 def del_input_files(filename):
    os.remove(filename)
 
+
 def main():
-   create_input_file(3)
-   
-   temp = [1, 2, 3]
-   record_approximation(temp, 1)
 
-   temp = [1, 3, 2]
-   record_approximation(temp, 2)
-
-   step_one = read_input("apprx_input_size3/step_1.txt")
-   print(step_one)
-
-   step_two = read_input("apprx_input_size3/step_2.txt")
-   print(step_two)
    return
 
 
