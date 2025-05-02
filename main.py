@@ -32,8 +32,29 @@ def calc_kendall_tau(x, y):
 
 # recurcive function that makes n switches and calculates the max error based on current approximation
 def calc_max_error(approximation, currlist, switches):
-  if switches == 0:
-     calc_kendall_tau()
+   all_permutations = [currlist]
+   for steps in range(0, switches):
+      curr_list_size = len(all_permutations)
+      for x in range(0, curr_list_size):
+         for i in range(0, len(currlist) - 1):
+            temp_list = all_permutations[x].copy()
+
+            # swap i and i + 1
+            temp = temp_list[i]
+            temp_list[i] = temp_list[i + 1]
+            temp_list[i + 1] = temp
+            print(temp_list)
+            tr = temp_list in all_permutations
+            print(str(tr) + "\n")
+
+            if not temp_list in all_permutations:
+               all_permutations.append(temp_list)
+               print("enters \n")
+   print(all_permutations)
+
+
+#   if switches == 0:
+#      calc_kendall_tau()
 
 
 # writes the approximation and the corresponding step into a dir with the inputfile as name
@@ -68,7 +89,8 @@ def del_input_files(filename):
 
 
 def main():
-
+   test = [1, 2, 3]
+   calc_max_error([1, 2, 3], test, 0)
    return
 
 
