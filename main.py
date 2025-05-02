@@ -55,7 +55,6 @@ def get_all_permutations(currlist, n):
 # could try and see what happenens if we reverse the order and it prioritizes the bottom switches, this should be worse for our algorithm in theory
 def calc_max_error(approximation, currlist, n):
    all_permutations = get_all_permutations(currlist, n)
-   print(all_permutations)
    worst_case = currlist.copy()
    max_distance = calc_kendall_tau(approximation, currlist)
 
@@ -99,10 +98,11 @@ def del_input_files(filename):
 
 
 def main():
-   x = [1, 2, 3]
-   y = [1, 2, 3]
-   calc_max_error(x, y, 4)
+   # x = [1, 2, 3]
+   # y = [1, 2, 3]
+   # calc_max_error(x, y, 4)
    # print(str(calc_kendall_tau(x, y)))
+   print(get_all_permutations([], 1))
    return
 
 
