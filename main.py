@@ -66,7 +66,7 @@ def calc_max_error(approximation, currlist, n):
 
 # writes the approximation and the corresponding step into a dir with the inputfile as name
 def record_approximation(list, curr_step):
-   file = open("/home/yasin/Thesis/apprx_input_size" + str(len(list)) + "/step_" +  str(curr_step) + ".txt", "x")
+   file = open("/home/yasin/Thesis/approx_input_size" + str(len(list)) + "/step_" +  str(curr_step) + ".txt", "x")
    for i in range(0, len(list)):
       file.write(str(list[i]) + "\n")
 
@@ -76,7 +76,7 @@ def create_input_file(input_size):
    file = open("input_size" +  str(input_size) + ".txt", "x")
    for i in range(0, input_size):
       file.write(str(i + 1) + "\n")
-   os.mkdir("apprx_input_size" + str(input_size))
+   os.mkdir("approx_input_size" + str(input_size))
 
 
 # read from a file the input and return it as a list

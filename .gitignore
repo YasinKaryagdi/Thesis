@@ -2,4 +2,11 @@
 *.txt
 
 # ignore all approx_input_size dirs
-approx_input_size*/
+
+apprx_input_size*
+
+# ignore coverage report
+.coverage
+
+# ignore pycache in tests
+tests/__pycache__
