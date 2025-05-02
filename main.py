@@ -31,9 +31,15 @@ def calc_kendall_tau(x, y):
 
 
 # recurcive function that makes n switches and calculates the max error based on current approximation
-def calc_max_error(approximation, currlist, switches):
+def calc_max_error(approximation, currlist, n):
    all_permutations = [currlist]
-   for steps in range(0, switches):
+   worst_case = currlist.copy()
+
+   max_distance = calc_kendall_tau(approximation, currlist)
+   print(str(max_distance))
+
+   # get all possible permutations from currlist with at most n swaps
+   for switch in range(0, n):
       curr_list_size = len(all_permutations)
       for x in range(0, curr_list_size):
          for i in range(0, len(currlist) - 1):
@@ -43,14 +49,28 @@ def calc_max_error(approximation, currlist, switches):
             temp = temp_list[i]
             temp_list[i] = temp_list[i + 1]
             temp_list[i + 1] = temp
-            print(temp_list)
-            tr = temp_list in all_permutations
-            print(str(tr) + "\n")
 
             if not temp_list in all_permutations:
                all_permutations.append(temp_list)
-               print("enters \n")
+
+   for x in all_permutations:
+      curr_distance = calc_kendall_tau(approximation, x)
+      if curr_distance > max_distance :
+         max_distance = curr_distance
+         worst_case = x.copy()
+         print(worst_case)
+         print("\n")
+         print(str(max_distance))
+         print("entered \n")
+
+   print("results: \n")
    print(all_permutations)
+   print("\n")
+   print(worst_case)
+   print("\n")
+
+   print(str(max_distance))
+   return worst_case
 
 
 #   if switches == 0:
@@ -89,8 +109,10 @@ def del_input_files(filename):
 
 
 def main():
-   test = [1, 2, 3]
-   calc_max_error([1, 2, 3], test, 0)
+   x = [1, 2, 3]
+   y = [2, 3, 1]
+   calc_max_error(x, y, 0)
+   # print(str(calc_kendall_tau(x, y)))
    return
 
 
