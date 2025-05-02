@@ -35,17 +35,14 @@ def read_input(file_name):
 # calculates the K error given two lists x and y
 def calc_kendall_tau(x, y):
    discordant_pairs = 0
+   
    for i in range(0, len(x)):
       for j in range(i + 1, len(x)):
-         print("indi: " + str(i) + " valxi: " + str(x[i]) )
-         print("indj: " + str(j) + " valxj: " + str(x[j]) )
-         print("indi: " + str(i) + " valyi: " + str(y[i]) )
-         print("indj: " + str(j) + " valyj: " + str(y[j]) + "\n")
          a = x[i] - x[j]
          b = y[i] - y[j]
+
          # if discordant (different signs)
          if (a * b < 0):
-               print("discordant \n \n")
                discordant_pairs += 1
 
    return discordant_pairs
@@ -60,28 +57,8 @@ def calc_max_error(approximation, currlist, switches):
 def del_input_files(filename):
    os.remove(filename)
 
-# testing creating input and reading input
-# def main():
-#    input_size = 100
-#    file_name = "input_file_size" +  str(input_size) + ".txt"
-
-#    create_input_file(input_size)
-#    my_list = read_input(file_name)
-#    # del_input_files(file_name)
-
-#    for x in my_list:
-#       print(x)
-
-#    print("\n")
-#    print(len(my_list))
-
-# testing kendall tau function
 def main():
-   x = [1, 2, 3, 4, 5]
-   y = [1, 2, 3, 5, 4]
-
-   distance = calc_kendall_tau(x, y)
-   print(distance)
+   return
 
 
 
