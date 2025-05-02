@@ -61,6 +61,8 @@ def del_input_files(filename):
    os.remove(filename)
 
 def main():
+   create_input_file(3)
+   
    temp = [1, 2, 3]
    record_approximation(temp, 1)
 

@@ -1,2 +1,5 @@
 # ignore all .txt files
 *.txt
+
+# ignore all approx_input_size dirs
+approx_input_size*/
