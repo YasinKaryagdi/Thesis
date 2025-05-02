@@ -11,16 +11,20 @@ def blocksort():
 def quicksort():
    return ordered_list
 
-def record_approximation():
+def record_approximation(list, curr_step):
    # want to write the step and the approx into a map with the inputfile as name, so for example:
    # for each step of input_file_size10.txt we write to a dir input_file_size10, stepi.txt for the ith approximation
-   return temp
+   file = open("/home/yasin/Thesis/apprx_input_size" + str(len(list)) + "/step_" +  str(curr_step) + ".txt", "x")
+   for i in range(0, len(list)):
+      file.write(str(list[i]) + "\n")
+
 
 # used in order to create initial input files
 def create_input_file(input_size):
-   file = open("input_file_size" +  str(input_size) + ".txt", "x")
+   file = open("input_size" +  str(input_size) + ".txt", "x")
    for i in range(0, input_size):
       file.write(str(i + 1) + "\n")
+   os.mkdir("apprx_input_size" + str(input_size))
 
 # read from a file the input and return it as a list
 def read_input(file_name):
@@ -58,6 +62,17 @@ def del_input_files(filename):
    os.remove(filename)
 
 def main():
+   temp = [1, 2, 3]
+   record_approximation(temp, 1)
+
+   temp = [1, 3, 2]
+   record_approximation(temp, 2)
+
+   step_one = read_input("apprx_input_size3/step_1.txt")
+   print(step_one)
+
+   step_two = read_input("apprx_input_size3/step_2.txt")
+   print(step_two)
    return
 
 
