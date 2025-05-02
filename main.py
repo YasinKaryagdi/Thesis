@@ -29,19 +29,10 @@ def calc_kendall_tau(x, y):
 
    return discordant_pairs
 
-
-# when given an approxamation it tries to maximize the distance with the real list by making at most n switches to it
-# prioritizes the permutations where the switches have been made at the higher rank, 
-# this is due to the for loop that loops through all permutations,
-# could try and see what happenens if we reverse the order and it prioritizes the bottom switches, this should be worse for our algorithm in theory
-def calc_max_error(approximation, currlist, n):
+# get all possible permutations from currlist with at most n swaps
+def get_all_permutations(currlist, n):
    all_permutations = [currlist]
-   worst_case = currlist.copy()
 
-   max_distance = calc_kendall_tau(approximation, currlist)
-   print(str(max_distance))
-
-   # get all possible permutations from currlist with at most n swaps
    for switch in range(0, n):
       curr_list_size = len(all_permutations)
       for x in range(0, curr_list_size):
@@ -55,6 +46,18 @@ def calc_max_error(approximation, currlist, n):
 
             if not temp_list in all_permutations:
                all_permutations.append(temp_list)
+   return all_permutations
+
+
+# when given an approxamation it tries to maximize the distance with the real list by making at most n switches to it
+# prioritizes the permutations where the switches have been made at the higher rank, 
+# this is due to the for loop that loops through all permutations,
+# could try and see what happenens if we reverse the order and it prioritizes the bottom switches, this should be worse for our algorithm in theory
+def calc_max_error(approximation, currlist, n):
+   all_permutations = get_all_permutations(currlist, n)
+   print(all_permutations)
+   worst_case = currlist.copy()
+   max_distance = calc_kendall_tau(approximation, currlist)
 
    for x in all_permutations:
       curr_distance = calc_kendall_tau(approximation, x)
@@ -97,8 +100,8 @@ def del_input_files(filename):
 
 def main():
    x = [1, 2, 3]
-   y = [2, 3, 1]
-   calc_max_error(x, y, 0)
+   y = [1, 2, 3]
+   calc_max_error(x, y, 4)
    # print(str(calc_kendall_tau(x, y)))
    return
 
