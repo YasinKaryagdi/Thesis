@@ -7,6 +7,8 @@ apprx_input_size*
 
 # ignore coverage report
 .coverage
+.coveragerc 
 
 # ignore pycache in tests
 tests/__pycache__
+__pycache__
