@@ -2,11 +2,24 @@ import numpy
 import matplotlib
 import pandas
 import os
-
+import random
 
 # implementation of quicksort
-def quicksort():
-   return ordered_list
+def randomized_quicksort(list):
+   if len(list) <= 1:
+      return list
+   index_pivot = random.randrange(0, len(list), 1)
+   pivot =  list[index_pivot]
+   
+   left = []
+   right = []
+   for x in list:
+      if x < pivot:
+         left.append(x)
+      elif x > pivot:
+         right.append(x)
+   pivot_arr = [pivot]
+   return randomized_quicksort(left) + pivot_arr + randomized_quicksort(right)
 
 
 # implementation of blocksort
@@ -102,7 +115,8 @@ def main():
    # y = [1, 2, 3]
    # calc_max_error(x, y, 4)
    # print(str(calc_kendall_tau(x, y)))
-   print(get_all_permutations([], 1))
+   list = [1, 2]
+   print(list[1])
    return
 
 
