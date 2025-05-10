@@ -13,7 +13,7 @@ class Stats:
     seed: int
     input_size : int
 
-    def __init__(self, rand_seed, n, *args):
+    def __init__(self, rand_seed, n):
         self.seed = rand_seed
         self.approx_list = []
         self.real_list = []
@@ -51,6 +51,9 @@ class Stats:
         # TODO: check if the order is correct and if it matters
         distance = self.calc_kendall_tau(self.real_list, self.approx_list)
         self.distances.append(distance)
+
+    def get_iterations(self, probe_rate):
+        return len(self.probes) / probe_rate
 
     def print_latest_updates(self):
         print("current iteration is: " + str(len(self.real_list)))
