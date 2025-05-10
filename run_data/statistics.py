@@ -8,14 +8,18 @@ import random
 class Stats:
     approx_list: list[list[int]]
     real_list: list[list[int]]
+    probes: list[list[int]]
     distances: list[int]
     seed: int
+    input_size : int
 
     def __init__(self, rand_seed, n, *args):
         self.seed = rand_seed
         self.approx_list = []
         self.real_list = []
         self.distances = []
+        self.probes = []
+        input_size = n
 
         
     def add_approx(self, curr_approx):
@@ -23,6 +27,10 @@ class Stats:
         
     def add_real(self, curr_real):
         self.approx_list.append(curr_real)
+        
+    
+    def add_probe(self, i, j):
+        self.probes.append([i, j])
 
     # calculates the K error given two lists x and y
     def calc_kendall_tau(x, y):

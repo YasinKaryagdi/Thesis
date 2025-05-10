@@ -12,19 +12,24 @@ class DynamicList:
 
     def __init__(self, rand_seed, n, *args):
         random.seed(rand_seed)
-        self.stats = Stats()
+        self.stats = Stats(rand_seed, n)
         self.real = []
         for i in range(0, n):
             self.real.append(i + 1)
         
     # todo, finish and test
-    def probe(self, num1, num2):
+    def probe(self, i, j):
         
-        i = self.real.index(num1)
-        j = self.real.index(num2)
-        return 
+        i = self.real.index(i)
+        j = self.real.index(j)
+        return i < j
         
-    def swap(self):
+    def swap(self, i, j):
+        temp = self.real[i]
+        self.real[i] =  self.real[j]
+        self.real[j] = temp
+
+    def random_swap(self):
         n = len(self.real)
 
         # from 0 to n-2, since the last swap we can do is n-1 with n-2 
