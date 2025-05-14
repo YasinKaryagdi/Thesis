@@ -10,6 +10,8 @@ class DynamicList:
     curr_approx: list[int]
     probe_rate: int
     change_rate: int
+    curr_quicksort_list: list[int]
+    curr_blocksort_list: list[int]
     stats: Stats
 
     def __init__(self, rand_seed, probe_rate, change_rate, n):
@@ -20,17 +22,15 @@ class DynamicList:
 
         self.real = []
         for i in range(0, n):
-            self.real.append(i + 1)
+            self.real.append(i)
         
     # todo, finish and test
     def probe(self, i, j):
         self.stats.add_probe(i, j)
+        index_i = self.real.index(i)
+        index_j = self.real.index(j)
+        return index_i < index_j
 
-
-        i = self.real.index(i)
-        j = self.real.index(j)
-        return i < j
-    
     # todo, finish and test
     def probe_with_swap(self, i, j):
         self.stats.add_probe(i, j)
@@ -38,9 +38,10 @@ class DynamicList:
         for x in range(0, self.change_rate):
             self.random_swap()
 
-        i = self.real.index(i)
-        j = self.real.index(j)
-        return i < j
+        index_i = self.real.index(i)
+        index_j = self.real.index(j)
+        return index_i < index_j
+
         
     def swap(self, i, j):
         temp = self.real[i]
@@ -54,12 +55,15 @@ class DynamicList:
         i = random.randint(0, n - 2)
 
         # for testing
-        print(str(i) + "\n")
+        # print(str(i) + "\n")
         
         temp = self.real[i]
         self.real[i] =  self.real[i + 1]
         self.real[i + 1] = temp
-        print("current real list is: \n")
-        print(self.real)
+        # print("current real list is: \n")
+        # print(self.real)
+    
+    def permuteAnswer(self, ansPerm):
+        self.curr_approx = ansPerm.copy()
 
     

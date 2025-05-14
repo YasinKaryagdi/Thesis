@@ -3,6 +3,7 @@ import matplotlib
 import pandas
 import os
 import random
+from model.dynamic_list import DynamicList
 
 # implementation of quicksort
 def randomized_quicksort(list):
@@ -115,8 +116,11 @@ def main():
    # y = [1, 2, 3]
    # calc_max_error(x, y, 4)
    # print(str(calc_kendall_tau(x, y)))
-   list = [1, 2]
-   print(list[1])
+   # list = DynamicList(0, 1, 1, 3)
+   # assert list.real == [1, 2, 3]
+   # list.real = [3, 2, 1]
+   # print (list.probe(1, 3))
+   # sort = [1, 2, 3]
    return
 
 
