@@ -23,6 +23,10 @@ class DynamicList:
         self.real = []
         for i in range(0, n):
             self.real.append(i)
+
+        self.curr_approx = []
+        for i in range(0, n):
+            self.curr_approx.append(i)
         
     # todo, finish and test
     def probe(self, i, j):
@@ -43,7 +47,7 @@ class DynamicList:
         return index_i < index_j
 
         
-    def swap(self, i, j):
+    def swap_real(self, i, j):
         temp = self.real[i]
         self.real[i] =  self.real[j]
         self.real[j] = temp
@@ -63,7 +67,11 @@ class DynamicList:
         # print("current real list is: \n")
         # print(self.real)
     
-    def permuteAnswer(self, ansPerm):
-        self.curr_approx = ansPerm.copy()
+    def permute_answer(self, ans_perm):
+        self.curr_approx = ans_perm.copy()
 
+    def size(self):
+        return len(self.real)
     
+    def get_time(self):
+        return len(self.stats.probes)

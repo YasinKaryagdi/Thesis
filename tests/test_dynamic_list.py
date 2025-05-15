@@ -37,11 +37,11 @@ def test_swap(ex1, ex2, ex3, ex4):
 
         assert list.real == ex1
         
-        list.swap(0, 1)
+        list.swap_real(0, 1)
         assert list.real == ex2
-        list.swap(1, 2)
+        list.swap_real(1, 2)
         assert list.real == ex3
-        list.swap(0, 2)
+        list.swap_real(0, 2)
         assert list.real == ex4
 
 @pytest.mark.parametrize("n, i, j, truth", [
@@ -68,7 +68,7 @@ def test_old_probe_with_swap(n, i, j, l, m, truth1, ex, truth2):
         assert list.real == [0,1,2]
         assert list.probe(i, j) == truth1
 
-        list.swap(l, m)
+        list.swap_real(l, m)
         assert list.real == ex
         assert list.probe(i, j) == truth2
 
@@ -91,3 +91,26 @@ def test_new_probe_with_swap(n, i, j, change_rate, truth1, ex, truth2):
 
         assert list.real == ex
         assert list.probe_with_swap(i, j) == truth2
+
+
+@pytest.mark.parametrize("n", [
+    (10),(100), (10000)
+])
+
+def test_get_size(n):
+        list = DynamicList(0,1,1, n)
+        assert list.size() == n
+
+@pytest.mark.parametrize("n", [
+    (10),(100), (10000)
+])
+
+def test_get_time(n):
+        list = DynamicList(0,1,1, n)
+        assert list.get_time() == 0
+
+        # perform some probes
+        for i in range(0, n-1):
+            list.probe(i, i+1)
+
+        assert list.get_time() == n-1
