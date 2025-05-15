@@ -33,7 +33,7 @@ class Stats:
         self.probes.append([i, j])
 
     # calculates the K error given two lists x and y
-    def calc_kendall_tau(x, y):
+    def calc_kendall_tau(self, x, y):
         discordant_pairs = 0
         
         for i in range(0, len(x)):
@@ -47,9 +47,9 @@ class Stats:
 
         return discordant_pairs
     
-    def add_curr_distance(self):
+    def add_curr_distance(self, real, approx):
         # TODO: check if the order is correct and if it matters
-        distance = self.calc_kendall_tau(self.real_list, self.approx_list)
+        distance = self.calc_kendall_tau(real, approx)
         self.distances.append(distance)
 
     def get_iterations(self, probe_rate):

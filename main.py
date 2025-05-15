@@ -1,9 +1,10 @@
 import numpy
-import matplotlib
+import matplotlib.pyplot as plt
 import pandas
 import os
 import random
 from model.dynamic_list import DynamicList
+from algorithms.algorithms import *
 
 # implementation of quicksort
 def randomized_quicksort(list):

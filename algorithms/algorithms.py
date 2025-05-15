@@ -15,7 +15,7 @@ def partition(list:DynamicList, toSort, low, high):
 
     i = low - 1
     for j in range(low, high):
-        if(list.probe(toSort[j],toSort[high])):
+        if(list.probe_with_swap(toSort[j],toSort[high])):
             i += 1
             temp = toSort[i]
             toSort[i] = toSort[j]
@@ -53,7 +53,7 @@ def repeated_insertion_sort(list: DynamicList, time_limit):
         for i in range(1, n):
             j = i
             # probe the ints at approx[j] with approx[j - 1]
-            while j > 0 and list.probe(list.curr_approx[j], list.curr_approx[j - 1]):
+            while j > 0 and list.probe_with_swap(list.curr_approx[j], list.curr_approx[j - 1]):
                 temp = list.curr_approx[j-1]
                 list.curr_approx[j-1] = list.curr_approx[j]
                 list.curr_approx[j] = temp

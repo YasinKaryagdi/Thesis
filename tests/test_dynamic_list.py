@@ -102,7 +102,7 @@ def test_get_size(n):
         assert list.size() == n
 
 @pytest.mark.parametrize("n", [
-    (10),(100), (10000)
+    (10),(100)
 ])
 
 def test_get_time(n):

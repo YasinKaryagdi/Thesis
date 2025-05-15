@@ -20,6 +20,7 @@ class DynamicList:
         self.probe_rate = probe_rate
         self.change_rate = change_rate
 
+        # maybe I want to initialize this as reverse ordered, so that we always start at maximal distance
         self.real = []
         for i in range(0, n):
             self.real.append(i)
@@ -31,6 +32,7 @@ class DynamicList:
     # todo, finish and test
     def probe(self, i, j):
         self.stats.add_probe(i, j)
+        self.stats.add_curr_distance(self.real, self.curr_approx)
         index_i = self.real.index(i)
         index_j = self.real.index(j)
         return index_i < index_j
@@ -38,6 +40,8 @@ class DynamicList:
     # todo, finish and test
     def probe_with_swap(self, i, j):
         self.stats.add_probe(i, j)
+        self.stats.add_curr_distance(self.real, self.curr_approx)
+
 
         for x in range(0, self.change_rate):
             self.random_swap()
@@ -75,3 +79,8 @@ class DynamicList:
     
     def get_time(self):
         return len(self.stats.probes)
+    
+    def reverse_order(self):
+        n = self.size()
+        for i in range(0, n):
+            self.real[i] = (n - 1)- i
