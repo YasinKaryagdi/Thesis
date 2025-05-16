@@ -4,6 +4,7 @@
 
 from run_data.statistics import Stats
 import random
+from math import pow
 
 class DynamicList:
     real: list[int]
@@ -13,6 +14,7 @@ class DynamicList:
     curr_quicksort_list: list[int]
     curr_blocksort_list: list[int]
     stats: Stats
+    random_swap_index: list[int]
 
     def __init__(self, rand_seed, probe_rate, change_rate, n):
         random.seed(rand_seed)
@@ -28,6 +30,13 @@ class DynamicList:
         self.curr_approx = []
         for i in range(0, n):
             self.curr_approx.append(i)
+
+        self.random_swap_index = []
+        for i in range(0, n + 1):
+            for j in range(0, n + 1):
+                # from 0 to n-2, since the last swap we can do is n-1 with n-2 
+                random_int = random.randint(0, n - 2)
+                self.random_swap_index.append(random_int)
         
     # todo, finish and test
     def probe(self, i, j):
@@ -59,8 +68,10 @@ class DynamicList:
     def random_swap(self):
         n = len(self.real)
 
-        # from 0 to n-2, since the last swap we can do is n-1 with n-2 
-        i = random.randint(0, n - 2)
+
+        # this way we have that all the different algorithms get the same swaps in the real,
+        # so we can more accurately compare them on the same seed
+        i = self.random_swap_index[self.get_time() - 1]
 
         # for testing
         # print(str(i) + "\n")
