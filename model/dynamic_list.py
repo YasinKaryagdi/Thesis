@@ -16,11 +16,12 @@ class DynamicList:
     stats: Stats
     random_swap_index: list[int]
 
-    def __init__(self, rand_seed, probe_rate, change_rate, n):
+    def __init__(self, rand_seed, probe_rate, change_rate, n, sample_rate):
         random.seed(rand_seed)
         self.stats = Stats(rand_seed, n)
         self.probe_rate = probe_rate
         self.change_rate = change_rate
+        self.sample_rate = sample_rate
 
         # maybe I want to initialize this as reverse ordered, so that we always start at maximal distance
         self.real = []
@@ -41,7 +42,10 @@ class DynamicList:
     # todo, finish and test
     def probe(self, i, j):
         self.stats.add_probe(i, j)
-        self.stats.add_curr_distance(self.real, self.curr_approx)
+        
+        # it's expensive timewise to calc this each iter so I'm also adding a samplerate to speed things up
+        if(self.get_time() % self.sample_rate == 0):
+            self.stats.add_curr_distance(self.real, self.curr_approx)
         index_i = self.real.index(i)
         index_j = self.real.index(j)
         return index_i < index_j

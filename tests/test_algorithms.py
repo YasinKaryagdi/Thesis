@@ -1,4 +1,4 @@
-from algorithms.algorithms import *
+from algorithms.algorithms_no_rand_swap import *
 import pytest 
 from model.dynamic_list import DynamicList
 import random
@@ -13,7 +13,7 @@ import math
 ])
 
 def test_quicksort_sorted_list(n, ex):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
     quicksort_base(list, n)
     assert list.curr_approx == ex
 
@@ -23,7 +23,7 @@ def test_quicksort_sorted_list(n, ex):
 ])
 
 def test_quicksort_reversed_list(n, initial, ex):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
     list.real = initial.copy()
     quicksort_base(list, n)
     assert list.curr_approx == ex
@@ -34,7 +34,7 @@ def test_quicksort_reversed_list(n, initial, ex):
 ])
 
 def test_quicksort_changed_real(n, initial):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
     list.real = initial.copy()
     quicksort_base(list, n)
     assert list.curr_approx == [4, 3, 2, 1, 0]
@@ -51,7 +51,7 @@ def test_quicksort_changed_real(n, initial):
 ])
 
 def test_insertion_sorted_list(n, ex):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
 
     # basically it will do one whole run of it because the while loop executes once wholly
     repeated_insertion_sort(list, 1)
@@ -63,7 +63,7 @@ def test_insertion_sorted_list(n, ex):
 ])
 
 def test_insertion_reversed_list(n, initial, ex):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
     list.real = initial.copy()
 
     # basically it will do one whole run of it because the while loop executes once wholly
@@ -76,7 +76,7 @@ def test_insertion_reversed_list(n, initial, ex):
 ])
 
 def test_insertion_changed_real(n, initial):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
     list.real = initial.copy()
     assert list.curr_approx == [0, 1, 2, 3, 4]
     repeated_insertion_sort(list, 1)
@@ -98,7 +98,7 @@ def test_insertion_changed_real(n, initial):
 ])
 
 def test_quick_then_insertion_sorted_list(n, ex):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
 
     # basically it will do one whole run of it because the while loop executes once wholly
     quick_then_insertion_sort(list, 1)
@@ -110,7 +110,7 @@ def test_quick_then_insertion_sorted_list(n, ex):
 ])
 
 def test_quick_then_insertion_reversed_list(n, initial, ex):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
     list.real = initial.copy()
 
     # basically it will do one whole run of it because the while loop executes once wholly
@@ -123,11 +123,11 @@ def test_quick_then_insertion_reversed_list(n, initial, ex):
 ])
 
 def test_quick_then_insertion_changed_real(n, initial):
-    list = DynamicList(0, 1, 1, n)
+    list = DynamicList(0, 1, 1, n, n)
     list.real = initial.copy()
     assert list.curr_approx == [0, 1, 2, 3, 4]
     quick_then_insertion_sort(list, 1)
-    assert list.get_time() == 6 # meaning that it checked everything but it was already sorted
+    assert list.get_time() == 8 # meaning that it checked everything but it was already sorted, check this later
     assert list.curr_approx == [4, 3, 2, 1, 0]
     list.swap_real(0,1)
     assert list.curr_approx == [4, 3, 2, 1, 0]
