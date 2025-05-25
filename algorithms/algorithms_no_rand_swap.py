@@ -59,11 +59,38 @@ def repeated_insertion_sort(list: DynamicList, time_limit):
                 list.curr_approx[j] = temp
                 j -= 1
 
+                # extra check that makes sure that we don't go over time
+                if list.get_time() >= time_limit:
+                    return
+
 
 def quick_then_insertion_sort(list: DynamicList, time_limit):
     n = list.size()
     quicksort_base(list,n)
     repeated_insertion_sort(list,time_limit)
+
+
+def rep_quick_then_insertion_sort(list: DynamicList, time_limit: int, iterations: int):
+    n = list.size()
+
+    while list.get_time() < time_limit:
+        quicksort_base(list,n)
+
+        k = 0
+        while (list.get_time() < time_limit) and (k < iterations):
+            for i in range(1, n):
+                j = i
+                # probe the ints at approx[j] with approx[j - 1]
+                while j > 0 and list.probe(list.curr_approx[j], list.curr_approx[j - 1]):
+                    temp = list.curr_approx[j-1]
+                    list.curr_approx[j-1] = list.curr_approx[j]
+                    list.curr_approx[j] = temp
+                    j -= 1
+
+                    # extra check that makes sure that we don't go over time
+                    if list.get_time() >= time_limit:
+                        return
+            k += 1
 
 
 def repeated_quicksort(list: DynamicList, time_limit):

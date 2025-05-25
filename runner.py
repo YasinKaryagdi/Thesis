@@ -2,31 +2,44 @@
 
 from model.dynamic_list import DynamicList
 from algorithms.algorithms import *
+import pandas as pd
 
 class Runner:
-    def __init__(self, rand_seed, probe_rate, change_rate, algorithm, input_size, time_limit, sample_rate):
+    algorithm: str
+    curr_list: DynamicList
+    time_limit: int
+
+    def __init__(self, rand_seed: int, probe_rate: int, change_rate: int, algorithm: str, input_size: int, time_limit: int, sample_rate: int, config: str):
         self.algorithm = algorithm
-        self.curr_list = DynamicList(rand_seed, probe_rate, change_rate, input_size, sample_rate)
         self.time_limit = time_limit
+        self.curr_list = DynamicList(rand_seed, probe_rate, change_rate, input_size, sample_rate, time_limit)
+
+        # currently only valid options are sorted and reverse-sorted
+        if config == "reverse-sorted":
+            self.curr_list.reverse_order()
+        elif config != "sorted":
+            raise Exception("Invalid config")
 
 
-    # TODO
     def run(self):
         if self.algorithm == "rep-quick":
             repeated_quicksort(self.curr_list, self.time_limit)
         elif self.algorithm == "block":
             return #temp
-        elif self.algorithm == "rep-insert":
+        elif self.algorithm == "rep-insertion":
             repeated_insertion_sort(self.curr_list, self.time_limit)
-        elif self.algorithm == "quick-rep-insert":
+        elif self.algorithm == "quick-rep-insertion":
             quick_then_insertion_sort(self.curr_list, self.time_limit)
-        elif self.algorithm == "rep-quick-rep-insert":
-            return #temp
+        elif self.algorithm.startswith("rep-quick-rep-insertion"):
+            temp = self.algorithm.split("-")
+            i = temp[len(temp) - 1]
+            rep_quick_then_insertion_sort(self.curr_list, self.time_limit, int(i))
         else:
             raise Exception("No correct alg given as input")
 
-        return
     
     def store_results(self, file_name):
-        #self.curr_list.stats.
-        return
+        results = pd.DataFrame(self.curr_list.stats.distances)
+        datatoexcel = pd.ExcelWriter(path = file_name)
+        results.to_excel(datatoexcel)
+        datatoexcel.close()

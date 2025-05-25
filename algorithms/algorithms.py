@@ -6,7 +6,7 @@ from model.q_sort_state import QSortState
 import random
 
 
-def partition(list:DynamicList, toSort, low, high):
+def partition(list:DynamicList, toSort, low: int, high: int):
     ranges = high - low + 1
     pivotChoice = low + random.randint(0, 32767) % ranges; # temp, fix random
     temp = toSort[high]
@@ -26,14 +26,14 @@ def partition(list:DynamicList, toSort, low, high):
     return i+1
 
 
-def quicksort(list: DynamicList, toSort, low, high):
+def quicksort(list: DynamicList, toSort, low: int, high: int):
   if low < high:
     pivot = partition(list, toSort, low, high)
     quicksort(list,toSort,low,pivot-1)
     quicksort(list,toSort,pivot+1,high)
 
 
-def quicksort_base(list: DynamicList, n):
+def quicksort_base(list: DynamicList, n: int):
     toSort = []
     for i in range(0, n):
         toSort.append(i)
@@ -47,7 +47,7 @@ def quicksort_base(list: DynamicList, n):
     list.permute_answer(toSort)
 
 
-def repeated_insertion_sort(list: DynamicList, time_limit):
+def repeated_insertion_sort(list: DynamicList, time_limit: int):
     n = list.size()
     while list.get_time() < time_limit:
         for i in range(1, n):
@@ -59,14 +59,39 @@ def repeated_insertion_sort(list: DynamicList, time_limit):
                 list.curr_approx[j] = temp
                 j -= 1
 
+                # extra check that makes sure that we don't go over time
+                if list.get_time() >= time_limit:
+                    return
 
-def quick_then_insertion_sort(list: DynamicList, time_limit):
+
+def quick_then_insertion_sort(list: DynamicList, time_limit: int):
     n = list.size()
     quicksort_base(list,n)
     repeated_insertion_sort(list,time_limit)
 
+def rep_quick_then_insertion_sort(list: DynamicList, time_limit: int, iterations: int):
+    n = list.size()
 
-def repeated_quicksort(list: DynamicList, time_limit):
+    while list.get_time() < time_limit:
+        quicksort_base(list,n)
+
+        k = 0
+        while (list.get_time() < time_limit) and (k < iterations):
+            for i in range(1, n):
+                j = i
+                # probe the ints at approx[j] with approx[j - 1]
+                while j > 0 and list.probe_with_swap(list.curr_approx[j], list.curr_approx[j - 1]):
+                    temp = list.curr_approx[j-1]
+                    list.curr_approx[j-1] = list.curr_approx[j]
+                    list.curr_approx[j] = temp
+                    j -= 1
+
+                    # extra check that makes sure that we don't go over time
+                    if not list.get_time() >= time_limit:
+                        return
+            k += 1
+
+def repeated_quicksort(list: DynamicList, time_limit: int):
     n = list.size()
     while(list.get_time() < time_limit):
         quicksort_base(list,n)

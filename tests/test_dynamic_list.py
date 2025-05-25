@@ -7,7 +7,7 @@ import pytest
 ])
 
 def test_init(expected):
-    list = DynamicList(1, 1, 1, 5, 5)
+    list = DynamicList(1, 1, 1, 5, 5, 25)
     assert list.real == expected
 
 @pytest.mark.parametrize("probe_rate, ex1, ex2", [
@@ -17,7 +17,7 @@ def test_init(expected):
 
 def test_random_swap(probe_rate, ex1, ex2):
     for x in range(0, 100):
-        list = DynamicList(x, probe_rate, 1, 2, 2)
+        list = DynamicList(x, probe_rate, 1, 2, 2, 10)
 
         assert list.real == ex1
 
@@ -33,7 +33,7 @@ def test_random_swap(probe_rate, ex1, ex2):
 
 def test_swap(ex1, ex2, ex3, ex4):
     
-        list = DynamicList(0,1,1, 3, 3)
+        list = DynamicList(0,1,1, 3, 3, 10)
 
         assert list.real == ex1
         
@@ -50,7 +50,7 @@ def test_swap(ex1, ex2, ex3, ex4):
 ])
 
 def test_probe(n, i, j, truth):
-        list = DynamicList(0,1,1, n, n)
+        list = DynamicList(0,1,1, n, n, n*n)
         assert list.probe(i, j) == truth
 
 @pytest.mark.parametrize("n, i, j,l,m, truth1, ex, truth2", [
@@ -63,7 +63,7 @@ def test_probe(n, i, j, truth):
 
 def test_old_probe_with_swap(n, i, j, l, m, truth1, ex, truth2):
     
-        list = DynamicList(0,1,1, n, n)
+        list = DynamicList(0,1,1, n, n, n*n)
 
         assert list.real == [0,1,2]
         assert list.probe(i, j) == truth1
@@ -84,7 +84,7 @@ def test_old_probe_with_swap(n, i, j, l, m, truth1, ex, truth2):
 
 def test_new_probe_with_swap(n, i, j, change_rate, truth1, ex, truth2):
     
-        list = DynamicList(0,1,change_rate, n, n)
+        list = DynamicList(0,1,change_rate, n, n, n*n)
 
         assert list.real == [0,1]
         assert list.probe_with_swap(i, j) == truth1
@@ -98,7 +98,7 @@ def test_new_probe_with_swap(n, i, j, change_rate, truth1, ex, truth2):
 ])
 
 def test_get_size(n):
-        list = DynamicList(0,1,1, n, n)
+        list = DynamicList(0,1,1, n, n, n*n)
         assert list.size() == n
 
 @pytest.mark.parametrize("n", [
@@ -106,7 +106,7 @@ def test_get_size(n):
 ])
 
 def test_get_time(n):
-        list = DynamicList(0,1,1, n, n)
+        list = DynamicList(0,1,1, n, n, n*n)
         assert list.get_time() == 0
 
         # perform some probes

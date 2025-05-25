@@ -1,5 +1,6 @@
 # ignore all .txt files
 *.txt
+testing_jup.ipynb
 
 # ignore all approx_input_size dirs
 
