@@ -18,7 +18,7 @@ class DynamicList:
 
     def __init__(self, rand_seed: int, probe_rate: int, change_rate: int, n: int, sample_rate: int, time_limit: int):
         random.seed(rand_seed)
-        self.stats = Stats(rand_seed, n)
+        self.stats = Stats(n)
         self.probe_rate = probe_rate
         self.change_rate = change_rate
         self.sample_rate = sample_rate
@@ -40,7 +40,7 @@ class DynamicList:
                     random_int = random.randint(0, n - 2)
                     self.random_swap_index.append(random_int)
         
-    # todo, finish and test
+    # used for testing
     def probe(self, i: int, j: int):
         self.stats.add_probe(i, j)
         
@@ -54,10 +54,10 @@ class DynamicList:
     # todo, finish and test
     def probe_with_swap(self, i: int, j: int):
         self.stats.add_probe(i, j)
-        self.stats.add_curr_distance(self.real, self.curr_approx)
 
+        if(self.get_time() % self.sample_rate == 0):
+            self.stats.add_curr_distance(self.real, self.curr_approx)
 
-        
         self.random_swap(self.change_rate)
 
         index_i = self.real.index(i)
@@ -78,14 +78,10 @@ class DynamicList:
             # so we can more accurately compare them on the same seed
             i = self.random_swap_index[((self.get_time() - 1) * change_rate) + x]
 
-            # for testing
-            # print(str(i) + "\n")
-            
             temp = self.real[i]
             self.real[i] =  self.real[i + 1]
             self.real[i + 1] = temp
-            # print("current real list is: \n")
-            # print(self.real)
+
     
     def permute_answer(self, ans_perm: list[int]):
         self.curr_approx = ans_perm.copy()

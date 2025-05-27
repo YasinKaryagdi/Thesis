@@ -44,13 +44,7 @@ def quicksort_base(list: DynamicList, n: int):
     toSort = []
     for i in range(0, n):
         toSort.append(i)
-
-    # print("toSort:before\n")
-    # print(toSort)
-    # print("\n")
     quicksort(list, toSort, 0, n - 1)
-    # print("toSort:after\n")
-    # print(toSort)
     list.permute_answer(toSort)
 
 

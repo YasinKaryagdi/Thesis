@@ -6,66 +6,65 @@
 import random
 
 class Stats:
-    approx_list: list[list[int]]
-    real_list: list[list[int]]
     probes: list[list[int]]
     distances: list[int]
-    seed: int
     input_size : int
 
-    def __init__(self, rand_seed, n):
-        self.seed = rand_seed
-        self.approx_list = []
-        self.real_list = []
+
+    def __init__(self, n):
         self.distances = []
         self.probes = []
-        input_size = n
+        self.input_size = n
 
-        
-    def add_approx(self, curr_approx):
-        self.approx_list.append(curr_approx)
-        
-    def add_real(self, curr_real):
-        self.approx_list.append(curr_real)
-        
     
     def add_probe(self, i, j):
         self.probes.append([i, j])
 
-    # calculates the K error given two lists x and y
-    def calc_kendall_tau(self, x, y):
-        discordant_pairs = 0
-        
-        for i in range(0, len(x)):
-            for j in range(i + 1, len(x)):
-                a = x[i] - x[j]
-                b = y[i] - y[j]
 
-                # if discordant (different signs)
-                if (a * b < 0):
-                    discordant_pairs += 1
+    def total_inversions(self, real):
+        vec = real.copy()
+        return self.merge_sort_inversions(vec)
 
-        return discordant_pairs
-    
+
+    def merge_sort_inversions(self, v):
+        n = len(v)
+        if n <= 1:
+            return 0
+
+        mid = n // 2
+        left = v[:mid]
+        right = v[mid:]
+
+        left_invs = self.merge_sort_inversions(left)
+        right_invs = self.merge_sort_inversions(right)
+
+        invs_between = 0
+        i = j = k = 0
+
+        while i < len(left) and j < len(right):
+            if self.aprox[left[i]] < self.aprox[right[j]]:
+                v[k] = left[i]
+                i += 1
+            else:
+                v[k] = right[j]
+                j += 1
+                invs_between += len(left) - i
+            k += 1
+
+        while i < len(left):
+            v[k] = left[i]
+            i += 1
+            k += 1
+
+        while j < len(right):
+            v[k] = right[j]
+            j += 1
+            k += 1
+
+        return left_invs + right_invs + invs_between
+
+
     def add_curr_distance(self, real, approx):
-        # TODO: check if the order is correct and if it matters
-        distance = self.calc_kendall_tau(real, approx)
+        self.aprox = approx  # ensure self.aprox is set correctly for inversion calculation
+        distance = self.total_inversions(real)
         self.distances.append(distance)
-
-    def get_iterations(self, probe_rate):
-        return len(self.probes) / probe_rate
-
-    def print_latest_updates(self):
-        print("current iteration is: " + str(len(self.real_list)))
-        print("curr real list is: \n")
-        print(self.real_list)
-        print("\n")
-
-        print("curr approx list is: \n")
-        print(self.approx_list[len(self.approx_list)])
-        print("\n")
-
-        print("their distance is: \n")
-        print(self.distances[len(self.distances)])
-        print("\n")
-        print("\n")
