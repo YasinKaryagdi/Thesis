@@ -22,6 +22,7 @@ class DynamicList:
         self.probe_rate = probe_rate
         self.change_rate = change_rate
         self.sample_rate = sample_rate
+        self.time_limit = time_limit
 
         # maybe I want to initialize this as reverse ordered, so that we always start at maximal distance
         self.real = []
@@ -33,8 +34,8 @@ class DynamicList:
             self.curr_approx.append(i)
 
         self.random_swap_index = []
-    
-        for i in range(0, time_limit):
+
+        for i in range(0, change_rate * (time_limit + n)):
                     # from 0 to n-2, since the last swap we can do is n-1 with n-2 
                     random_int = random.randint(0, n - 2)
                     self.random_swap_index.append(random_int)
@@ -56,8 +57,8 @@ class DynamicList:
         self.stats.add_curr_distance(self.real, self.curr_approx)
 
 
-        for x in range(0, self.change_rate):
-            self.random_swap()
+        
+        self.random_swap(self.change_rate)
 
         index_i = self.real.index(i)
         index_j = self.real.index(j)
@@ -69,22 +70,22 @@ class DynamicList:
         self.real[i] =  self.real[j]
         self.real[j] = temp
 
-    def random_swap(self):
+    def random_swap(self, change_rate):
         n = len(self.real)
 
+        for x in range(0, change_rate):
+            # this way we have that all the different algorithms get the same swaps in the real,
+            # so we can more accurately compare them on the same seed
+            i = self.random_swap_index[((self.get_time() - 1) * change_rate) + x]
 
-        # this way we have that all the different algorithms get the same swaps in the real,
-        # so we can more accurately compare them on the same seed
-        i = self.random_swap_index[self.get_time() - 1]
-
-        # for testing
-        # print(str(i) + "\n")
-        
-        temp = self.real[i]
-        self.real[i] =  self.real[i + 1]
-        self.real[i + 1] = temp
-        # print("current real list is: \n")
-        # print(self.real)
+            # for testing
+            # print(str(i) + "\n")
+            
+            temp = self.real[i]
+            self.real[i] =  self.real[i + 1]
+            self.real[i + 1] = temp
+            # print("current real list is: \n")
+            # print(self.real)
     
     def permute_answer(self, ans_perm: list[int]):
         self.curr_approx = ans_perm.copy()

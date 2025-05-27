@@ -15,6 +15,10 @@ def partition(list:DynamicList, toSort, low: int, high: int):
 
     i = low - 1
     for j in range(low, high):
+        # extra check that makes sure that we don't go over time
+        if list.get_time() >= list.time_limit:
+            return -1
+        
         if(list.probe_with_swap(toSort[j],toSort[high])):
             i += 1
             temp = toSort[i]
@@ -29,6 +33,9 @@ def partition(list:DynamicList, toSort, low: int, high: int):
 def quicksort(list: DynamicList, toSort, low: int, high: int):
   if low < high:
     pivot = partition(list, toSort, low, high)
+    # pivot of -1 means that list.get_time() >= list.time_limit so we return
+    if pivot == -1:
+        return
     quicksort(list,toSort,low,pivot-1)
     quicksort(list,toSort,pivot+1,high)
 
@@ -87,7 +94,7 @@ def rep_quick_then_insertion_sort(list: DynamicList, time_limit: int, iterations
                     j -= 1
 
                     # extra check that makes sure that we don't go over time
-                    if not list.get_time() >= time_limit:
+                    if list.get_time() >= time_limit:
                         return
             k += 1
 
