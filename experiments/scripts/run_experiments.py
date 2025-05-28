@@ -46,8 +46,8 @@ def run_experiment_parallel(
         for i in seed
     ]
 
-    # Use all available CPU cores - 3
-    num_processes = cpu_count() - 3
+    # Use all available CPU cores
+    num_processes = cpu_count()
     with Pool(processes=num_processes) as pool:
         pool.map(run_single_experiment, tasks)
 
