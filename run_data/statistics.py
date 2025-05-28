@@ -1,30 +1,27 @@
-# TODO: write class that can be used to store the whole state of an interation, 
+# TODO: write class that can be used to store the whole state of an interation,
 # so for example the curr kendall tau distance and the state of the real and the approx of both quicksorts,
-# maybe also how many inversions they fixed and how many occured? and also the conditions they occured in, 
+# maybe also how many inversions they fixed and how many occured? and also the conditions they occured in,
 # so for example change rate alpha
 
 import random
 
+
 class Stats:
     probes: list[list[int]]
     distances: list[int]
-    input_size : int
-
+    input_size: int
 
     def __init__(self, n):
         self.distances = []
         self.probes = []
         self.input_size = n
 
-    
     def add_probe(self, i, j):
         self.probes.append([i, j])
-
 
     def total_inversions(self, real):
         vec = real.copy()
         return self.merge_sort_inversions(vec)
-
 
     def merge_sort_inversions(self, v):
         n = len(v)
@@ -63,8 +60,9 @@ class Stats:
 
         return left_invs + right_invs + invs_between
 
-
     def add_curr_distance(self, real, approx):
-        self.aprox = approx  # ensure self.aprox is set correctly for inversion calculation
+        self.aprox = (
+            approx  # ensure self.aprox is set correctly for inversion calculation
+        )
         distance = self.total_inversions(real)
         self.distances.append(distance)

@@ -5,6 +5,7 @@
 from run_data.statistics import Stats
 import random
 
+
 class QSortState:
     low: int
     high: int
@@ -12,7 +13,7 @@ class QSortState:
     j: int
 
     def __init__(self, l, h):
-        low = l
-        high = h
-        i = low-1
-        j = low
+        self.low = l
+        self.high = h
+        self.i = self.low - 1
+        self.j = self.low
