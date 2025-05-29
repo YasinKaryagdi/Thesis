@@ -19,9 +19,9 @@ def run_single_experiment(args):
     )
 
     # Check if file already exists
-    # if os.path.exists(file_name):
-    #     print(f"Skipped (already exists): " + file_name)
-    #     return
+    if os.path.exists(file_name):
+        print(f"Skipped (already exists): " + file_name)
+        return
 
     time_limit = int(math.pow(n, 2))
     sample_rate = n / 20
@@ -73,7 +73,7 @@ def main():
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
 
-    input_size = [250, 500, 1000]
+    input_size = [100, 250, 500, 1000]
     algorithm = [
         "rep-insertion",
         "quick-rep-insertion",

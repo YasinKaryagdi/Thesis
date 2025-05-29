@@ -17,37 +17,40 @@ def store_average(input_size, algorithm, config, seed, change_rate, experiment_n
                 for con in config:
                     file_name_avg = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
 
-                    # # Check if file already exists
-                    # if os.path.exists(file_name_avg):
-                    #     print(f"Skipped (already exists): {file_name_avg}")
+                    # Check if file already exists
+                    if os.path.exists(file_name_avg):
+                        print(f"Skipped (already exists): {file_name_avg}")
 
-                    # else:
+                    else:
                     # if True:
-                    run_file_names = []
-                    for i in seed:
+                        print(f"Working on: {file_name_avg}")
+                        run_file_names = []
+                        for i in seed:
 
-                        file_name = f"experiments/results/experiment{experiment_num}/runs/{alg}-{n}-{c}-{i}.xlsx"
-                        run_file_names.append(file_name)
+                            file_name = f"experiments/results/experiment{experiment_num}/runs/{alg}-{n}-{c}-{i}.xlsx"
+                            run_file_names.append(file_name)
 
-                    time_limit = int(math.pow(n, 2))
-                    sample_rate = n / 20
-                    results = []
-                    for files in run_file_names:
-                        temp = pd.read_excel(files, index_col=0)
-                        results.append(temp)
-                    mean_results = pd.concat(results).groupby(level=0).mean()
-                    mean_results = mean_results[
-                        :time_limit
-                    ]  # supposed to be test[:time_limit]
+                        time_limit = int(math.pow(n, 2))
+                        sample_rate = n / 20
+                        results = []
+                        for files in run_file_names:
+                            # todo, add print statement here to see what file causes it to crash
+                            print(f"Current file: {files}")
+                            temp = pd.read_excel(files, index_col=0, engine='openpyxl')
+                            results.append(temp)
+                        mean_results = pd.concat(results).groupby(level=0).mean()
+                        mean_results = mean_results[
+                            :time_limit
+                        ]  # supposed to be test[:time_limit]
 
-                    mean_results["temp"] = mean_results.index * sample_rate
-                    mean_results.set_index("temp")
+                        mean_results["temp"] = mean_results.index * sample_rate
+                        mean_results.set_index("temp")
 
-                    # writing to Excel
-                    file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
-                    datatoexcel = pd.ExcelWriter(path=file_name)
-                    mean_results.to_excel(datatoexcel)
-                    datatoexcel.close()
+                        # writing to Excel
+                        file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
+                        datatoexcel = pd.ExcelWriter(path=file_name)
+                        mean_results.to_excel(datatoexcel)
+                        datatoexcel.close()
 
 
 def plot_figures(input_size, algorithm, change_rate, experiment_num):
@@ -60,7 +63,7 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
             for alg in algorithm:
                 file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
                 try:
-                    df = pd.read_excel(file_name, index_col=0)
+                    df = pd.read_excel(file_name, index_col=0, engine='openpyxl')
 
                     if "temp" in df.columns:
                         x = df["temp"]
@@ -112,7 +115,7 @@ def main():
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
 
-    input_size = [250, 500, 1000]
+    input_size = [100, 250, 500, 1000]
     algorithm = [
         "rep-insertion",
         "quick-rep-insertion",
@@ -126,18 +129,6 @@ def main():
 
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
-
-
-# def main():
-#     input_size = [100, 250, 500]
-#     algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
-#     config = ["sorted"]
-#     seed = range(0, 1)
-#     change_rate = [1, 5, 10]
-#     experiment_num = 2
-
-#     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
-#     plot_figures(input_size, algorithm, change_rate, experiment_num)
 
 
 main()
