@@ -58,22 +58,22 @@ def main():
     config = ["reverse-sorted"]
     seed = range(0, 100)
     change_rate = [1]
-    experiment_num = 1
+    experiment_num = 5 
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
 
-    input_size = [100, 250, 500, 1000]
+    input_size = [100, 500, 1000]
     algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
-    experiment_num = 2
+    experiment_num = 6
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
 
-    input_size = [100, 250, 500, 1000]
+    input_size = [100, 500, 1000]
     algorithm = [
         "rep-insertion",
         "quick-rep-insertion",
@@ -83,22 +83,25 @@ def main():
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 2, 5, 10, 20]
-    experiment_num = 3
+    experiment_num = 7
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
 
-
-# def main():
-#     input_size = [100, 250, 500]
-#     algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
-#     config = ["sorted"]
-#     seed = range(0, 200)
-#     change_rate = [1, 5, 10]
-#     experiment_num = 2
-#     run_experiment_parallel(
-#         input_size, algorithm, config, seed, change_rate, experiment_num
-#     )
+    input_size = [1000]
+    algorithm = [
+        "rep-insertion",
+        "quick-rep-insertion",
+        "rep-quick-rep-insertion-1",
+        "rep-quick-rep-insertion-2",
+    ]
+    config = ["sorted"]
+    seed = range(0, 100)
+    change_rate = [250]
+    experiment_num = 4
+    run_experiment_parallel(
+        input_size, algorithm, config, seed, change_rate, experiment_num
+    )
 
 
 main()

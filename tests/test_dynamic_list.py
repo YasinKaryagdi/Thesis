@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the parent directory (/home/yasin/Thesis) to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 from model.dynamic_list import DynamicList
 import pytest
 
@@ -17,14 +23,13 @@ def test_init(expected):
 )
 def test_random_swap(probe_rate, ex1, ex2):
     for x in range(0, 100):
-        list = DynamicList(x, probe_rate, 1, 2, 2, 10)
-
+        list = DynamicList(x, probe_rate, 1, 2, 1, 10)
         assert list.real == ex1
 
         for y in range(0, 100):
-            list.random_swap()
+            list.random_swap(1)
             assert list.real == ex2
-            list.random_swap()
+            list.random_swap(1)
             assert list.real == ex1
 
 

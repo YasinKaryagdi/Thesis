@@ -8,6 +8,7 @@ from runner import Runner
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes, mark_inset
 
 
 def store_average(input_size, algorithm, config, seed, change_rate, experiment_num):
@@ -22,7 +23,6 @@ def store_average(input_size, algorithm, config, seed, change_rate, experiment_n
                         print(f"Skipped (already exists): {file_name_avg}")
 
                     else:
-                    # if True:
                         print(f"Working on: {file_name_avg}")
                         run_file_names = []
                         for i in seed:
@@ -57,9 +57,11 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
     for n in input_size:
         time_limit = int(math.pow(n, 2))
         for c in change_rate:
-            # One plot for all algorithms with same n and c
-            plt.figure(figsize=(10, 6))
+            plt.figure(figsize=(6, 4))
             sample_rate = n / 20
+            ax = plt.gca()
+            ax.ticklabel_format(style='plain')
+
             for alg in algorithm:
                 file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
                 try:
@@ -72,25 +74,113 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
                         x = df.index * sample_rate
                         y = df.iloc[:, 0]
 
-                    plt.plot(x, y, label=alg)
+                    ax.plot(x, y, label=alg)
                 except FileNotFoundError:
                     print(f"File not found: {file_name}")
                     continue
 
-            plt.title(f"Algorithm Behavior (input size = {n}, change rate = {c})")
-            plt.xlabel("Number of Probes")
-            plt.ylabel("Average Kendall-Tau Distance")
-            plt.legend()
-            plt.grid(True)
+            if experiment_num == 1 or experiment_num == 5:
+                ax.set_title(f"Algorithm Behavior (input size = {n}, change rate = {c})")
+                ax.set_xlabel("Number of Probes")
+                ax.set_ylabel("Average Kendall-Tau Distance")
+                ax.legend(loc='upper right')
+            else:
+                ax.legend(loc='upper left')
+                axins = zoomed_inset_axes(ax, zoom=6, loc='lower right')
+                inset_start = int(time_limit * 0.9)
+                inset_end = int(time_limit * 0.99)
+                y_values = []
+                
+                for alg in algorithm:
+                    file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
+                    try:
+                        df = pd.read_excel(file_name, index_col=0, engine='openpyxl')
 
-            plt.xlim(0, time_limit)
+                        if "temp" in df.columns:
+                            x = df["temp"]
+                            y = df.iloc[:, 0]
+                        else:
+                            x = df.index * sample_rate
+                            y = df.iloc[:, 0]
 
-            plt.tight_layout()
+                        # Limit data to inset x-range
+                        mask = (x >= inset_start) & (x <= inset_end)
+                        axins.plot(x[mask], y[mask], label=alg)
+                        y_values.extend(y[mask].values)
+                    except FileNotFoundError:
+                        continue
 
-            plot_file = (
-                f"experiments/results/experiment{experiment_num}/plots/plot-{n}-{c}.png"
-            )
-            plt.savefig(plot_file)
+                axins.set_xlim(inset_start, inset_end)
+
+                if y_values:
+                    y_min = min(y_values)
+                    y_max = max(y_values)
+                    if experiment_num == 1 or experiment_num == 5:
+                        padding = (y_max - y_min) * 1
+                    else:
+                        padding = (y_max - y_min) * 0.1
+                    axins.set_ylim(y_min - padding, y_max + padding)
+
+                axins.grid(True)
+                axins.axes.get_xaxis().set_visible(False)
+                mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
+
+            ax.grid(True)
+            ax.set_xlim(0, time_limit)
+            plot_file = f"experiments/results/experiment{experiment_num}/plots/plot-{n}-{c}.png"
+            plt.savefig(plot_file, bbox_inches='tight')
+            plt.close()
+
+def plot_end_point(input_size, algorithm, change_rate, experiment_num):
+    for n in input_size:
+        time_limit = int(math.pow(n, 2))
+        for c in change_rate:
+            plt.figure(figsize=(6, 4))
+            sample_rate = n / 20
+            ax = plt.gca()
+            ax.ticklabel_format(style='plain')
+
+            inset_start = int(time_limit * 0.9)
+            inset_end = time_limit
+            y_values = []
+
+            for alg in algorithm:
+                file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
+                try:
+                    df = pd.read_excel(file_name, index_col=0, engine='openpyxl')
+
+                    if "temp" in df.columns:
+                        x = df["temp"]
+                        y = df.iloc[:, 0]
+                    else:
+                        x = df.index * sample_rate
+                        y = df.iloc[:, 0]
+
+                    # Limit data to inset x-range
+                    mask = (x >= inset_start) & (x <= inset_end)
+                    ax.plot(x[mask], y[mask], label=alg)
+                    y_values.extend(y[mask].values)
+                except FileNotFoundError:
+                    print(f"File not found: {file_name}")
+                    continue
+
+            ax.set_xlim(inset_start, inset_end)
+
+            # Set dynamic y-axis limits based on data range
+            if y_values:
+                y_min = min(y_values)
+                y_max = max(y_values)
+                padding = (y_max - y_min) * 0.1 if y_max > y_min else 0.05
+                ax.set_ylim(y_min - padding, y_max + padding)
+
+            ax.set_title(f"Zoomed Endpoint (n = {n}, change rate = {c})")
+            ax.set_xlabel("Number of Probes")
+            ax.set_ylabel("Average Kendall-Tau Distance")
+            ax.legend(loc='upper left')
+            ax.grid(True)
+
+            plot_file = f"experiments/results/experiment{experiment_num}/plots/endpoint-{n}-{c}.png"
+            plt.savefig(plot_file, bbox_inches='tight')
             plt.close()
 
 
@@ -100,22 +190,23 @@ def main():
     config = ["reverse-sorted"]
     seed = range(0, 100)
     change_rate = [1]
-    experiment_num = 1
+    experiment_num = 5 #temp, used to be 1
 
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
+    plot_end_point(input_size, algorithm, change_rate, experiment_num)
 
-    input_size = [100, 250, 500, 1000]
+    input_size = [100, 500, 1000]
     algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
-    experiment_num = 2
+    experiment_num = 6 #temp, used to be 2
 
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
 
-    input_size = [100, 250, 500, 1000]
+    input_size = [100, 500, 1000]
     algorithm = [
         "rep-insertion",
         "quick-rep-insertion",
@@ -125,8 +216,22 @@ def main():
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 2, 5, 10, 20]
-    experiment_num = 3
+    experiment_num = 7 #temp, used to be 3
 
+    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
+    plot_figures(input_size, algorithm, change_rate, experiment_num)
+
+    input_size = [1000]
+    algorithm = [
+        "rep-insertion",
+        "quick-rep-insertion",
+        "rep-quick-rep-insertion-1",
+        "rep-quick-rep-insertion-2",
+    ]
+    config = ["sorted"]
+    seed = range(0, 100)
+    change_rate = [250]
+    experiment_num = 4
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
 

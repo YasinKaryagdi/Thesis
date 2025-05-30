@@ -1,12 +1,10 @@
-# TODO: want to run a certain configuration of an experiment and then in main use this class in order to run all the experiments
-
 from model.dynamic_list import DynamicList
 from algorithms.algorithms import *
 import pandas as pd
 
 
 class Runner:
-    algorithm: str
+    alg: str
     curr_list: DynamicList
     time_limit: int
 
@@ -21,31 +19,31 @@ class Runner:
         sample_rate: int,
         config: str,
     ):
-        self.algorithm = algorithm
+        self.alg= algorithm
         self.time_limit = time_limit
         self.curr_list = DynamicList(
             rand_seed, probe_rate, change_rate, input_size, sample_rate, time_limit
         )
 
-        # currently only valid options are sorted and reverse-sorted
+        # Currently only valid options are sorted and reverse-sorted
         if config == "reverse-sorted":
             self.curr_list.reverse_order()
         elif config != "sorted":
             raise Exception("Invalid config")
 
     def run(self):
-        if self.algorithm == "rep-quick":
+        if self.alg == "rep-quick":
             repeated_quicksort(self.curr_list, self.time_limit)
-        elif self.algorithm.startswith("block"):
-            temp = self.algorithm.split("-")
-            i = temp[len(temp) - 1]
-            blocked_quicksort(self.curr_list, self.time_limit, int(i))
-        elif self.algorithm == "rep-insertion":
+        elif self.alg.startswith("block"):
+            temp = self.alg.split("-")
+            block_constant = temp[len(temp) - 1]
+            blocked_quicksort(self.curr_list, self.time_limit, int(block_constant))
+        elif self.alg == "rep-insertion":
             repeated_insertion_sort(self.curr_list, self.time_limit)
-        elif self.algorithm == "quick-rep-insertion":
+        elif self.alg == "quick-rep-insertion":
             quick_then_insertion_sort(self.curr_list, self.time_limit)
-        elif self.algorithm.startswith("rep-quick-rep-insertion"):
-            temp = self.algorithm.split("-")
+        elif self.alg.startswith("rep-quick-rep-insertion"):
+            temp = self.alg.split("-")
             i = temp[len(temp) - 1]
             rep_quick_then_insertion_sort(self.curr_list, self.time_limit, int(i))
         else:

@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the parent directory (/home/yasin/Thesis) to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 from algorithms.algorithms_no_rand_swap import *
 import pytest
 from model.dynamic_list import DynamicList
@@ -11,9 +17,13 @@ import math
 # testing quicksort
 @pytest.mark.parametrize("n, ex", [(5, [0, 1, 2, 3, 4])])
 def test_quicksort_sorted_list(n, ex):
-    list = DynamicList(0, 1, 1, n, n, n * n)
-    quicksort_base(list, n)
-    assert list.curr_approx == ex
+    l = DynamicList(0, 1, 1, n, 1, int(n * n))
+    print("Before sort:", l.curr_approx)
+
+    quicksort_base(l, n)
+    print("After sort:", l.curr_approx)
+
+    assert l.curr_approx == ex
 
 
 @pytest.mark.parametrize(

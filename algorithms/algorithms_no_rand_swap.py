@@ -5,8 +5,8 @@ import math as math
 
 
 def partition(list: DynamicList, toSort, low, high):
-    range = high - low + 1
-    pivotChoice = low + random.randint(0, 32767) % range
+    ranges = high - low + 1
+    pivotChoice = low + random.randint(0, 32767) % ranges
     # temp, fix random
     temp = toSort[high]
     toSort[high] = toSort[pivotChoice]
