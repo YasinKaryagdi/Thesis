@@ -215,7 +215,7 @@ def main():
     ]
     config = ["sorted"]
     seed = range(0, 100)
-    change_rate = [1, 2, 5, 10, 20]
+    change_rate = [1, 5, 10, 20]
     experiment_num = 7 #temp, used to be 3
 
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
