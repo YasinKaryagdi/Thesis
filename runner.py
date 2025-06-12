@@ -19,7 +19,7 @@ class Runner:
         sample_rate: int,
         config: str,
     ):
-        self.alg= algorithm
+        self.alg = algorithm
         self.time_limit = time_limit
         self.curr_list = DynamicList(
             rand_seed, probe_rate, change_rate, input_size, sample_rate, time_limit
@@ -31,6 +31,7 @@ class Runner:
         elif config != "sorted":
             raise Exception("Invalid config")
 
+    # Runs the relevant algorithm with the current configuration
     def run(self):
         if self.alg == "rep-quick":
             repeated_quicksort(self.curr_list, self.time_limit)
@@ -48,7 +49,8 @@ class Runner:
             rep_quick_then_insertion_sort(self.curr_list, self.time_limit, int(i))
         else:
             raise Exception("No correct alg given as input")
-
+    	
+    # Saves the results of the current run in the for of an excel sheet
     def store_results(self, file_name):
         results = pd.DataFrame(self.curr_list.stats.distances)
         datatoexcel = pd.ExcelWriter(path=file_name)

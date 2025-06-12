@@ -1,16 +1,2 @@
-# TODO
-
-- [ ] Implement randomized quicksort
-- [ ] Implement blocksort
-
-- [ ] Test if current stat methods work properly
-- [ ] Implement stats methods for writing all data to files (probably use pandas)
-
-
-- [ ] Implement methods for reading from files ->
-
-- [ ] Write runner in order to run the same configuration a certain amount of times
-
-- [ ] Implement stats methods for generating statistics and graphs from the result files
-
-- [ ] Write thesis
+# This is the code for my thesis regarding sorting algorithm run within the evolving data model
+For running your own experiments you will need to configure the experiments in run_experiments.py and plot_experiments.py, which can be found in the experiments/scripts directory. Lastly, for each experiment you will need to empty out the avg directory and the runs directory, because it will skip over already performed runs.

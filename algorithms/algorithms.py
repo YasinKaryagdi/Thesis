@@ -39,9 +39,10 @@ def quicksort(list: DynamicList, to_sort, low: int, high: int):
         # introduced in order to stop running the algorithm after the time limit has passed
         if pivot == -1:
             return
-        
+
         quicksort(list, to_sort, low, pivot - 1)
         quicksort(list, to_sort, pivot + 1, high)
+
 
 # Given a random list that goes from 0 to n-1 sort it based on the order in the real list,
 # afterwards update the curr_approx to the result,
@@ -60,7 +61,7 @@ def repeated_insertion_sort(list: DynamicList, time_limit: int):
     while list.get_time() < time_limit:
         for i in range(1, n):
             j = i
-            # probe the ints at approx[j] with approx[j - 1]
+            # Probe the ints at approx[j] with approx[j - 1]
             while j > 0 and list.probe_with_swap(
                 list.curr_approx[j], list.curr_approx[j - 1]
             ):
@@ -73,11 +74,13 @@ def repeated_insertion_sort(list: DynamicList, time_limit: int):
                 if list.get_time() >= time_limit:
                     return
 
+
 # Perform one run of quicksort, followed by repeated insertion sort
 def quick_then_insertion_sort(list: DynamicList, time_limit: int):
     n = list.size()
     quicksort_base(list, n)
     repeated_insertion_sort(list, time_limit)
+
 
 # Perform repeated runs of one quicksort, followed by a certain amount of insertion sort runs
 def rep_quick_then_insertion_sort(list: DynamicList, time_limit: int, iterations: int):
@@ -90,7 +93,7 @@ def rep_quick_then_insertion_sort(list: DynamicList, time_limit: int, iterations
         while (list.get_time() < time_limit) and (k < iterations):
             for i in range(1, n):
                 j = i
-                # probe the ints at approx[j] with approx[j - 1]
+                # Probe the ints at approx[j] with approx[j - 1]
                 while j > 0 and list.probe_with_swap(
                     list.curr_approx[j], list.curr_approx[j - 1]
                 ):
@@ -103,6 +106,7 @@ def rep_quick_then_insertion_sort(list: DynamicList, time_limit: int, iterations
                     if list.get_time() >= time_limit:
                         return
             k += 1
+
 
 # Repeatedly perform quicksort until the time limit is reached
 def repeated_quicksort(list: DynamicList, time_limit: int):
@@ -117,7 +121,6 @@ def start_new_quicksort_call(
     if low < high:
         range = high - low + 1
         pivotChoice = low + random.randint(0, 32767) % range
-        # temp, fix random
         temp = to_sort[high]
         to_sort[high] = to_sort[pivotChoice]
         to_sort[pivotChoice] = temp
@@ -132,11 +135,11 @@ def stack_quicksort_run_step(
 
     while not step_performed:
 
-        # if there are no quicksort calls on the stack, terminate
+        # If there are no quicksort calls on the stack, terminate
         if len(call_stack) == 0:
             return False
 
-        # otherwise attempt to run a step of the top call
+        # Otherwise attempt to run a step of the top call
         curr_call = call_stack[-1]
         low = curr_call.low
         high = curr_call.high
@@ -153,13 +156,13 @@ def stack_quicksort_run_step(
             step_performed = True
         else:
             call_stack.pop()
-            # if the quicksort call finished
-            # move the pivot into the correct position
+            # If the quicksort call finished,
+            # then move the pivot into the correct position
             temp = to_sort[i + 1]
             to_sort[i + 1] = to_sort[high]
             to_sort[high] = temp
 
-            # and start the two new recursive calls
+            # And start the two new recursive calls
             low_left = low
             high_left = i
             low_right = i + 2
@@ -181,7 +184,7 @@ def blocked_quicksort(list: DynamicList, time_limit: int, block_constant: int):
     while n % m != 0:
         m += 2
 
-    # Initial full sort
+    # Initial full quicksort
     full_stack = []
     quicksort_base(list, n)
     to_full_sort = list.curr_approx.copy()

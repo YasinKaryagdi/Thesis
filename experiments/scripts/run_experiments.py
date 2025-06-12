@@ -1,13 +1,11 @@
 import sys
 import os
 
-# Add the parent directory (/home/yasin/Thesis) to sys.path
+# Add the parent directory of the parent directory, so the directory Thesis, to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 import math
 from multiprocessing import Pool, cpu_count
-import pandas as pd
-import matplotlib.pyplot as plt
 from runner import Runner
 
 
@@ -20,7 +18,7 @@ def run_single_experiment(args):
 
     # Check if file already exists
     if os.path.exists(file_name):
-        print(f"Skipped (already exists): " + file_name)
+        print(f"Skipped (already exists): {file_name}")
         return
 
     time_limit = int(math.pow(n, 2))
@@ -48,9 +46,6 @@ def run_experiment_parallel(
 
     # Use all available CPU cores
     num_processes = cpu_count()
-    # for task in tasks:
-    #    run_single_experiment(task)
-    # print(num_processes)
     with Pool(processes=num_processes) as pool:
         pool.map(run_single_experiment, tasks)
 
@@ -61,7 +56,7 @@ def main():
     config = ["reverse-sorted"]
     seed = range(0, 100)
     change_rate = [1]
-    experiment_num = 5 
+    experiment_num = 1
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
@@ -71,7 +66,7 @@ def main():
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
-    experiment_num = 6
+    experiment_num = 2
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
@@ -86,7 +81,7 @@ def main():
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
-    experiment_num = 7
+    experiment_num = 3
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
@@ -105,5 +100,6 @@ def main():
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
+
 
 main()

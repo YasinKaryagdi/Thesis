@@ -5,9 +5,13 @@ import random
 class DynamicList:
     real: list[int]
     curr_approx: list[int]
-    probe_rate: int
     change_rate: int
     stats: Stats
+
+    # Is currently unused but it seems to be too late to remove it without
+    # potentially breaking something, can be used in the future but would most likely require
+    # you to change the way the probe method works.
+    probe_rate: int
 
     def __init__(
         self,
@@ -35,19 +39,6 @@ class DynamicList:
         for i in range(0, n):
             self.curr_approx.append(i)
 
-
-    # Used for testing
-    def probe(self, i: int, j: int):
-        self.stats.add_probe(i, j)
-
-        # It's expensive timewise to calc this each iter so I'm also adding a samplerate to speed things up
-        if self.get_time() % self.sample_rate == 0:
-            self.stats.add_curr_distance(self.real, self.curr_approx)
-
-        index_i = self.real.index(i)
-        index_j = self.real.index(j)
-        return index_i < index_j
-
     # Performs change_rate amount of uniformly random swaps before probe,
     # sorts based on the index of int i and j in the real list, so based on their positions in the real
     def probe_with_swap(self, i: int, j: int):
@@ -62,12 +53,7 @@ class DynamicList:
         index_j = self.real.index(j)
         return index_i < index_j
 
-    # Should have probably used this more, currently only used for testing
-    def swap_real(self, i: int, j: int):
-        temp = self.real[i]
-        self.real[i] = self.real[j]
-        self.real[j] = temp
-
+    # Used to perform random swaps in the real
     def random_swap(self, change_rate):
         n = len(self.real)
 
@@ -78,7 +64,7 @@ class DynamicList:
             self.real[i] = self.real[i + 1]
             self.real[i + 1] = temp
 
-    # Used to update the current appoximation
+    # Used to update the current approximation
     def permute_answer(self, ans_perm: list[int]):
         self.curr_approx = ans_perm.copy()
 
@@ -87,12 +73,13 @@ class DynamicList:
         return len(self.real)
 
     # Used to get the current number of probes performed,
-    # we only consider the case where the probe rate = 1, 
+    # we only consider the case where the probe rate = 1,
     # so this is the same as taking the len of the list keeping track of all the probes
     def get_time(self):
         return len(self.stats.probes)
 
-    # Used to sort the real list decreasingly
+    # Used to start with a real list that is reverse sorted,
+    # so it is sorted decreasingly
     def reverse_order(self):
         n = self.size()
         for i in range(0, n):

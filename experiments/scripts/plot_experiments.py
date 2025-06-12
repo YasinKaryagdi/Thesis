@@ -1,10 +1,9 @@
 import sys
 import os
 
-# Add the parent directory (/home/yasin/Thesis) to sys.path
+# Add the parent directory of the parent directory, so the directory Thesis, to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from runner import Runner
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -34,14 +33,12 @@ def store_average(input_size, algorithm, config, seed, change_rate, experiment_n
                         sample_rate = n / 20
                         results = []
                         for files in run_file_names:
-                            # todo, add print statement here to see what file causes it to crash
+                            # Print statement
                             print(f"Current file: {files}")
-                            temp = pd.read_excel(files, index_col=0, engine='openpyxl')
+                            temp = pd.read_excel(files, index_col=0, engine="openpyxl")
                             results.append(temp)
                         mean_results = pd.concat(results).groupby(level=0).mean()
-                        mean_results = mean_results[
-                            :time_limit
-                        ]  # supposed to be test[:time_limit]
+                        mean_results = mean_results[:time_limit]
 
                         mean_results["temp"] = mean_results.index * sample_rate
                         mean_results.set_index("temp")
@@ -60,12 +57,12 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
             plt.figure(figsize=(6, 4))
             sample_rate = n / 20
             ax = plt.gca()
-            ax.ticklabel_format(style='plain')
+            ax.ticklabel_format(style="plain")
 
             for alg in algorithm:
                 file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
                 try:
-                    df = pd.read_excel(file_name, index_col=0, engine='openpyxl')
+                    df = pd.read_excel(file_name, index_col=0, engine="openpyxl")
 
                     if "temp" in df.columns:
                         x = df["temp"]
@@ -79,57 +76,62 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
                     print(f"File not found: {file_name}")
                     continue
 
-            if experiment_num == 1 or experiment_num == 5:
+            if experiment_num == 1:
                 ax.set_title(f"Algorithm Behavior (input size = {n}, change rate = {c})")
-                ax.set_xlabel("Number of Probes")
+                ax.set_xlabel("Number of Comparisons")
                 ax.set_ylabel("Average Kendall-Tau Distance")
-                ax.legend(loc='upper right')
+                ax.legend(loc="upper right")
             else:
-                ax.legend(loc='upper left')
-                axins = zoomed_inset_axes(ax, zoom=6, loc='lower right')
-                inset_start = int(time_limit * 0.9)
-                inset_end = int(time_limit * 0.99)
-                y_values = []
-                
-                for alg in algorithm:
-                    file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
-                    try:
-                        df = pd.read_excel(file_name, index_col=0, engine='openpyxl')
+                ax.legend(loc="upper left")
 
-                        if "temp" in df.columns:
-                            x = df["temp"]
-                            y = df.iloc[:, 0]
+                if not (experiment_num == 3 and c == 1):
+                    axins = zoomed_inset_axes(ax, zoom=6, loc="lower right")
+                    inset_start = int(time_limit * 0.9)
+                    inset_end = int(time_limit * 0.99)
+                    y_values = []
+
+                    for alg in algorithm:
+                        file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
+                        try:
+                            df = pd.read_excel(
+                                file_name, index_col=0, engine="openpyxl"
+                            )
+
+                            if "temp" in df.columns:
+                                x = df["temp"]
+                                y = df.iloc[:, 0]
+                            else:
+                                x = df.index * sample_rate
+                                y = df.iloc[:, 0]
+
+                            # Limit data to inset x-range
+                            mask = (x >= inset_start) & (x <= inset_end)
+                            axins.plot(x[mask], y[mask], label=alg)
+                            y_values.extend(y[mask].values)
+                        except FileNotFoundError:
+                            continue
+
+                    axins.set_xlim(inset_start, inset_end)
+
+                    if y_values:
+                        y_min = min(y_values)
+                        y_max = max(y_values)
+                        if experiment_num == 1 or experiment_num == 5:
+                            padding = (y_max - y_min) * 1
                         else:
-                            x = df.index * sample_rate
-                            y = df.iloc[:, 0]
+                            padding = (y_max - y_min) * 0.1
+                        axins.set_ylim(y_min - padding, y_max + padding)
 
-                        # Limit data to inset x-range
-                        mask = (x >= inset_start) & (x <= inset_end)
-                        axins.plot(x[mask], y[mask], label=alg)
-                        y_values.extend(y[mask].values)
-                    except FileNotFoundError:
-                        continue
-
-                axins.set_xlim(inset_start, inset_end)
-
-                if y_values:
-                    y_min = min(y_values)
-                    y_max = max(y_values)
-                    if experiment_num == 1 or experiment_num == 5:
-                        padding = (y_max - y_min) * 1
-                    else:
-                        padding = (y_max - y_min) * 0.1
-                    axins.set_ylim(y_min - padding, y_max + padding)
-
-                axins.grid(True)
-                axins.axes.get_xaxis().set_visible(False)
-                mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
+                    axins.grid(True)
+                    axins.axes.get_xaxis().set_visible(False)
+                    mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
 
             ax.grid(True)
             ax.set_xlim(0, time_limit)
-            plot_file = f"experiments/results/experiment{experiment_num}/plots/plot-{n}-{c}.png"
-            plt.savefig(plot_file, bbox_inches='tight')
+            plot_file = f"experiments/results/experiment{experiment_num}/plots/plot-{n}-{c}.pdf"
+            plt.savefig(plot_file, bbox_inches="tight", format="pdf")
             plt.close()
+
 
 def plot_end_point(input_size, algorithm, change_rate, experiment_num):
     for n in input_size:
@@ -138,7 +140,7 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
             plt.figure(figsize=(6, 4))
             sample_rate = n / 20
             ax = plt.gca()
-            ax.ticklabel_format(style='plain')
+            ax.ticklabel_format(style="plain")
 
             inset_start = int(time_limit * 0.9)
             inset_end = time_limit
@@ -147,7 +149,7 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
             for alg in algorithm:
                 file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
                 try:
-                    df = pd.read_excel(file_name, index_col=0, engine='openpyxl')
+                    df = pd.read_excel(file_name, index_col=0, engine="openpyxl")
 
                     if "temp" in df.columns:
                         x = df["temp"]
@@ -174,13 +176,13 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
                 ax.set_ylim(y_min - padding, y_max + padding)
 
             ax.set_title(f"Zoomed Endpoint (n = {n}, change rate = {c})")
-            ax.set_xlabel("Number of Probes")
+            ax.set_xlabel("Number of Comparisons")
             ax.set_ylabel("Average Kendall-Tau Distance")
-            ax.legend(loc='upper left')
+            ax.legend(loc="upper left")
             ax.grid(True)
 
-            plot_file = f"experiments/results/experiment{experiment_num}/plots/endpoint-{n}-{c}.png"
-            plt.savefig(plot_file, bbox_inches='tight')
+            plot_file = f"experiments/results/experiment{experiment_num}/plots/endpoint-{n}-{c}.pdf"
+            plt.savefig(plot_file, bbox_inches="tight", format="pdf")
             plt.close()
 
 
@@ -190,7 +192,7 @@ def main():
     config = ["reverse-sorted"]
     seed = range(0, 100)
     change_rate = [1]
-    experiment_num = 5 #temp, used to be 1
+    experiment_num = 1
 
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
@@ -201,7 +203,7 @@ def main():
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
-    experiment_num = 6 #temp, used to be 2
+    experiment_num = 2
 
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
@@ -216,7 +218,7 @@ def main():
     config = ["sorted"]
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
-    experiment_num = 7 #temp, used to be 3
+    experiment_num = 3
 
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
