@@ -7,6 +7,7 @@ class DynamicList:
     curr_approx: list[int]
     change_rate: int
     stats: Stats
+    start_time: int
 
     # Is currently unused but it seems to be too late to remove it without
     # potentially breaking something, can be used in the future but would most likely require
@@ -21,6 +22,7 @@ class DynamicList:
         n: int,
         sample_rate: int,
         time_limit: int,
+        start_time: int
     ):
         random.seed(rand_seed)
         self.stats = Stats(n)
@@ -28,6 +30,7 @@ class DynamicList:
         self.change_rate = change_rate
         self.sample_rate = sample_rate
         self.time_limit = time_limit
+        self.start_time = start_time
 
         # We start with a real that goes from 0, to n
         self.real = []
@@ -44,7 +47,7 @@ class DynamicList:
     def probe_with_swap(self, i: int, j: int):
         self.stats.add_probe(i, j)
 
-        if self.get_time() % self.sample_rate == 0:
+        if (self.get_time() % self.sample_rate == 0) and (self.get_time() > self.start_time):
             self.stats.add_curr_distance(self.real, self.curr_approx)
 
         self.random_swap(self.change_rate)
