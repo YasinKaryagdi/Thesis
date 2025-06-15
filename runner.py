@@ -18,11 +18,12 @@ class Runner:
         time_limit: int,
         sample_rate: int,
         config: str,
+        start_time: int = 0
     ):
         self.alg = algorithm
         self.time_limit = time_limit
         self.curr_list = DynamicList(
-            rand_seed, probe_rate, change_rate, input_size, sample_rate, time_limit
+            rand_seed, probe_rate, change_rate, input_size, sample_rate, time_limit, start_time
         )
 
         # Currently only valid options are sorted and reverse-sorted

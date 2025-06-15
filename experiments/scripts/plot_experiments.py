@@ -188,12 +188,11 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
 
 def main():
     input_size = [1000]
-    algorithm = ["rep-quick", "block-10", "rep-insertion", "quick-rep-insertion"]
+    algorithm = ["rep-quick", "block-10", "rep-insertion", "quick-rep-insertion", "rep-quick-rep-insertion-1"]
     config = ["reverse-sorted"]
     seed = range(0, 100)
     change_rate = [1]
     experiment_num = 1
-
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
     plot_end_point(input_size, algorithm, change_rate, experiment_num)
@@ -204,7 +203,6 @@ def main():
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
     experiment_num = 2
-
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
 
@@ -214,28 +212,51 @@ def main():
         "quick-rep-insertion",
         "rep-quick-rep-insertion-1",
         "rep-quick-rep-insertion-2",
+        "rep-quick-rep-insertion-5",
+        "rep-quick-rep-insertion-10"
     ]
     config = ["sorted"]
     seed = range(0, 100)
-    change_rate = [1, 5, 10, 20]
+    change_rate = [1, 5, 10, 20, 250]
     experiment_num = 3
-
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
 
-    input_size = [1000]
+
+    input_size = [100, 500, 1000, 5000, 10000]
+    algorithm = [
+        "rep-quick", "block-10", "quick-rep-insertion", "rep-insertion"
+    ]
+    config = ["reverse-sorted"]
+    seed = range(0, 100)
+    change_rate = [1, 2, 10]
+    experiment_num = 4
+    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
+    plot_figures(input_size, algorithm, change_rate, experiment_num)
+
+    input_size = [100, 500, 1000, 5000, 10000]
+    algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
+    config = ["reverse-sorted"]
+    seed = range(0, 100)
+    change_rate = [1, 5, 10, 20]
+    experiment_num = 5
+    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
+    plot_figures(input_size, algorithm, change_rate, experiment_num)
+
+    input_size = [100, 500, 1000, 5000, 10000]
     algorithm = [
         "rep-insertion",
         "quick-rep-insertion",
         "rep-quick-rep-insertion-1",
         "rep-quick-rep-insertion-2",
+        "rep-quick-rep-insertion-5",
+        "rep-quick-rep-insertion-10"
     ]
-    config = ["sorted"]
+    config = ["reverse-sorted"]
     seed = range(0, 100)
-    change_rate = [250]
-    experiment_num = 4
+    change_rate = [1, 5, 10, 20]
+    experiment_num = 6
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
-
 
 main()
