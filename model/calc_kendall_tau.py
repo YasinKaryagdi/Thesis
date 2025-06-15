@@ -1,5 +1,6 @@
 import pytest
 from statistics import Stats
+import scipy.stats as stats
 
 import sys
 import os
@@ -34,7 +35,7 @@ from runner import Runner
     ([1, 2, 3, 4], [3, 4, 2, 1], 5),
     ([1, 2, 3, 4], [4, 2, 3, 1], 5),
     ([1, 2, 3, 4], [4, 3, 1, 2], 5),
-    ([1, 2, 3, 4], [4, 3, 2, 1], 6)
+    ([4, 3, 2, 1], [1, 2, 3, 4], 6)
 ])
 
 # testing whether kendall tau distances are calculated correctly, 
@@ -49,6 +50,12 @@ def test_calc_kendall_tau(x, y, expected):
 # given two lists we should get the amount of swaps minimally required to go from one to the other list
 def test_calc_kendall_tau_run():
 
-    temp = Runner(0, 1, 5, "block-10", 1000, 100000, 10, "sorted", 0)
-    
+    temp = Runner(0, 1, 5, "block-10", 4, 5, 1, "sorted")
+    assert temp.curr_list.stats.distances == []
+    assert temp.curr_list.stats.distances == temp.curr_list.stats.distances2
+
+    temp.run()
+    # assert temp.curr_list.stats.distances == []
+    print(temp.curr_list.stats.mistakes_real[0])
+    print(temp.curr_list.stats.mistakes_approx[0])
     assert temp.curr_list.stats.distances == temp.curr_list.stats.distances2

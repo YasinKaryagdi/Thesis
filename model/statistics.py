@@ -9,6 +9,8 @@ class Stats:
         self.distances = []
         self.distances2 = []
         self.probes = []
+        self.mistakes_real= []
+        self.mistakes_approx = []
 
     # Adds the current probe and the probes indexes to the list
     def add_probe(self, i, j):
@@ -68,13 +70,15 @@ class Stats:
                 i += 1
             else:
                 temp[k] = right[j]
-                k += 1
-                j += 1
 
                 # Something on the right being smaller means that there are a certain number
                 # of inversions, namely (left_size - i), where i is the index of the current element on the left,
                 # so we essentially have that this right side element agrees with i elements but is discordant with the rest of the left array
                 between_invs += (left_size - i)
+                print(f"discordant element: {right[j]}, putting it in spot {k}, adding {(left_size - i)}, total : {between_invs}")
+
+                k += 1
+                j += 1
             
         # Copy over the remaining elements in either left or right,
         # the while loop will fail for at least one
@@ -98,8 +102,21 @@ class Stats:
         self.distances.append(distance)
 
         temp = approx.copy()
-        distance = self.merge_sort(real, temp)
-        self.distances2.append(distance)
+        distance2 = self.merge_sort(real, temp)
+        self.distances2.append(distance2)
+
+        if distance != distance2:
+            self.mistakes_approx.append(approx)
+            
+            self.mistakes_real.append(real)
+            print(real)
+            print(approx)
+            print(distance2)
+            print(f"went bad ^ \n")
+            print(f"\n")
+        else:
+            print(f"went well \n")
+
 
     # Adds the current distance between the real order and our approximation
     def add_curr_distance_merge(self, real: list[int], approx: list[int]):
