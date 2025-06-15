@@ -24,7 +24,7 @@ def run_single_experiment(args):
     sample_rate = n / 20
     probe_rate = 1
     if endpoint_experiment:
-        start_percentage = 0.97 #temp doing 0.97 to prove that concept works
+        start_percentage = 0.90 # Last 10 % of a run should be representative
         start_time = int(time_limit * start_percentage)
         cur_run = Runner(i, probe_rate, c, alg, n, time_limit, sample_rate, con, start_time)
     else:
@@ -67,65 +67,92 @@ def run_experiment_parallel(
 
 
 def main():
-    # input_size = [1000]
-    # algorithm = ["rep-quick", "block-10", "rep-insertion", "quick-rep-insertion"]
-    # config = ["reverse-sorted"]
-    # seed = range(0, 100)
-    # change_rate = [1]
-    # experiment_num = 1
-    # run_experiment_parallel(
-    #     input_size, algorithm, config, seed, change_rate, experiment_num
-    # )
+    input_size = [1000]
+    algorithm = ["rep-quick", "block-10", "rep-insertion", "quick-rep-insertion", "rep-quick-rep-insertion-1"]
+    config = ["reverse-sorted"]
+    seed = range(0, 3)
+    change_rate = [1]
+    experiment_num = 1
+    run_experiment_parallel(
+        input_size, algorithm, config, seed, change_rate, experiment_num
+    )
 
-    # input_size = [100, 500, 1000]
-    # algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
-    # config = ["sorted"]
-    # seed = range(0, 100)
-    # change_rate = [1, 5, 10, 20]
-    # experiment_num = 2
-    # run_experiment_parallel(
-    #     input_size, algorithm, config, seed, change_rate, experiment_num
-    # )
+    input_size = [100, 500, 1000]
+    algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
+    config = ["sorted"]
+    seed = range(0, 3)
+    change_rate = [1, 5, 10, 20]
+    experiment_num = 2
+    run_experiment_parallel(
+        input_size, algorithm, config, seed, change_rate, experiment_num
+    )
 
-    # input_size = [100, 500, 1000]
-    # algorithm = [
-    #     "rep-insertion",
-    #     "quick-rep-insertion",
-    #     "rep-quick-rep-insertion-1",
-    #     "rep-quick-rep-insertion-2",
-    # ]
-    # config = ["sorted"]
-    # seed = range(0, 100)
-    # change_rate = [1, 5, 10, 20]
-    # experiment_num = 3
-    # run_experiment_parallel(
-    #     input_size, algorithm, config, seed, change_rate, experiment_num
-    # )
+    input_size = [100, 500, 1000]
+    algorithm = [
+        "rep-insertion",
+        "quick-rep-insertion",
+        "rep-quick-rep-insertion-1",
+        "rep-quick-rep-insertion-2",
+    ]
+    config = ["sorted"]
+    seed = range(0, 3)
+    change_rate = [1, 5, 10, 20]
+    experiment_num = 3
+    run_experiment_parallel(
+        input_size, algorithm, config, seed, change_rate, experiment_num
+    )
 
-    # input_size = [1000]
-    # algorithm = [
-    #     "rep-insertion",
-    #     "quick-rep-insertion",
-    #     "rep-quick-rep-insertion-1",
-    #     "rep-quick-rep-insertion-2",
-    # ]
-    # config = ["sorted"]
-    # seed = range(0, 100)
-    # change_rate = [250]
-    # experiment_num = 4
-    # run_experiment_parallel(
-    #     input_size, algorithm, config, seed, change_rate, experiment_num
-    # )
+    input_size = [100, 500, 1000]
+    algorithm = [
+        "rep-insertion",
+        "quick-rep-insertion",
+        "rep-quick-rep-insertion-1",
+        "rep-quick-rep-insertion-2",
+        "rep-quick-rep-insertion-5",
+        "rep-quick-rep-insertion-10"
+    ]
+    config = ["sorted"]
+    seed = range(0, 3)
+    change_rate = [250]
+    experiment_num = 4
+    run_experiment_parallel(
+        input_size, algorithm, config, seed, change_rate, experiment_num
+    )
 
     input_size = [100, 500, 1000, 5000, 10000]
     algorithm = [
-        "rep-quick", "block-10", "quick-rep-insertion"
+        "rep-quick", "block-10", "quick-rep-insertion", "rep-insertion"
     ]
     config = ["reverse-sorted"]
-    seed = range(0, 1)
+    seed = range(0, 3)
     change_rate = [1]
     experiment_num = 5
     
+    run_experiment_parallel(
+        input_size, algorithm, config, seed, change_rate, experiment_num, True
+    )
+
+    input_size = [100, 500, 1000, 5000, 10000]
+    algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
+    config = ["reverse-sorted"]
+    seed = range(0, 3)
+    change_rate = [1, 5, 10, 20]
+    experiment_num = 6
+    run_experiment_parallel(
+        input_size, algorithm, config, seed, change_rate, experiment_num, True
+    )
+
+    input_size = [100, 500, 1000, 5000, 10000]
+    algorithm = [
+        "rep-insertion",
+        "quick-rep-insertion",
+        "rep-quick-rep-insertion-1",
+        "rep-quick-rep-insertion-2",
+    ]
+    config = ["reverse-sorted"]
+    seed = range(0, 3)
+    change_rate = [1, 5, 10, 20]
+    experiment_num = 7
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num, True
     )
