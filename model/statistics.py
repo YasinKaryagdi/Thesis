@@ -16,21 +16,6 @@ class Stats:
     def add_probe(self, i, j):
         self.probes.append([i, j])
 
-    # Calculates the Kendall tau distance between two lists x and y
-    def calc_kendall_tau(self, x, y):
-        discordant_pairs = 0
-
-        for i in range(0, len(x)):
-            for j in range(i + 1, len(x)):
-                a = x[i] - x[j]
-                b = y[i] - y[j]
-
-                # If discordant (different signs)
-                if a * b < 0:
-                    discordant_pairs += 1
-
-        return discordant_pairs
-
 
     # Allows comparison based on the index of int i and j in the real list, 
     # so based on their positions in the real
@@ -75,8 +60,6 @@ class Stats:
                 # of inversions, namely (left_size - i), where i is the index of the current element on the left,
                 # so we essentially have that this right side element agrees with i elements but is discordant with the rest of the left array
                 between_invs += (left_size - i)
-                print(f"discordant element: {right[j]}, putting it in spot {k}, adding {(left_size - i)}, total : {between_invs}")
-
                 k += 1
                 j += 1
             
@@ -98,28 +81,6 @@ class Stats:
 
     # Adds the current distance between the real order and our approximation
     def add_curr_distance(self, real: list[int], approx: list[int]):
-        distance = self.calc_kendall_tau(real, approx)
-        self.distances.append(distance)
-
-        temp = approx.copy()
-        distance2 = self.merge_sort(real, temp)
-        self.distances2.append(distance2)
-
-        if distance != distance2:
-            self.mistakes_approx.append(approx)
-            
-            self.mistakes_real.append(real)
-            print(real)
-            print(approx)
-            print(distance2)
-            print(f"went bad ^ \n")
-            print(f"\n")
-        else:
-            print(f"went well \n")
-
-
-    # Adds the current distance between the real order and our approximation
-    def add_curr_distance_merge(self, real: list[int], approx: list[int]):
         temp = approx.copy()
         distance = self.merge_sort(real, temp)
-        self.distances2.append(distance)
+        self.distances.append(distance)
