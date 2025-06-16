@@ -21,10 +21,15 @@ def run_single_experiment(args):
         return
 
     time_limit = int(math.pow(n, 2))
-    sample_rate = n / 20
+
+    if experiment_num == 1:
+        sample_rate = n / 20
+    else:
+        sample_rate = n / 10
+
     probe_rate = 1
     if endpoint_experiment:
-        start_percentage = 0.80 # Last 20 % of a run should be representative
+        start_percentage = 0.90 # Last 10 % of a run should be representative
         start_time = int(time_limit * start_percentage)
         cur_run = Runner(i, probe_rate, c, alg, n, time_limit, sample_rate, con, start_time)
     else:

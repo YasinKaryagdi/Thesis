@@ -47,7 +47,7 @@ class DynamicList:
     def probe_with_swap(self, i: int, j: int):
         self.stats.add_probe(i, j)
 
-        if (self.get_time() % self.sample_rate == 0) and (self.get_time() > self.start_time):
+        if (self.get_time() % self.sample_rate == 0) and (self.get_time() >= self.start_time) and (self.get_time() <= self.time_limit):
             self.stats.add_curr_distance(self.real, self.curr_approx)
 
         self.random_swap(self.change_rate)
