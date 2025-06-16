@@ -25,7 +25,7 @@ class DynamicList:
         start_time: int
     ):
         random.seed(rand_seed)
-        self.stats = Stats(n)
+        self.stats = Stats()
         self.probe_rate = probe_rate
         self.change_rate = change_rate
         self.sample_rate = sample_rate

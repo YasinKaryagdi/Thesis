@@ -5,12 +5,10 @@ class Stats:
     probes: list[list[int]]
     distances: list[int]
     
-    def __init__(self, n):
+    def __init__(self):
         self.distances = []
         self.distances2 = []
         self.probes = []
-        self.mistakes_real= []
-        self.mistakes_approx = []
 
     # Adds the current probe and the probes indexes to the list
     def add_probe(self, i, j):

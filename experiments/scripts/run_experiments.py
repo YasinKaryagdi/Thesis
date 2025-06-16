@@ -24,7 +24,7 @@ def run_single_experiment(args):
     sample_rate = n / 20
     probe_rate = 1
     if endpoint_experiment:
-        start_percentage = 0.75 # Last 25 % of a run should be representative
+        start_percentage = 0.80 # Last 20 % of a run should be representative
         start_time = int(time_limit * start_percentage)
         cur_run = Runner(i, probe_rate, c, alg, n, time_limit, sample_rate, con, start_time)
     else:
@@ -67,7 +67,7 @@ def run_experiment_parallel(
 
 
 def main():
-    input_size = [1000]
+    input_size = [100, 1000]
     algorithm = ["rep-quick", "block-10", "rep-insertion", "quick-rep-insertion", "rep-quick-rep-insertion-1"]
     config = ["reverse-sorted"]
     seed = range(0, 100)
@@ -90,11 +90,8 @@ def main():
     input_size = [100, 500, 1000]
     algorithm = [
         "rep-insertion",
-        "quick-rep-insertion",
         "rep-quick-rep-insertion-1",
-        "rep-quick-rep-insertion-2",
-        "rep-quick-rep-insertion-5",
-        "rep-quick-rep-insertion-10"
+        "rep-quick-rep-insertion-2"
     ]
     config = ["sorted"]
     seed = range(0, 100)
@@ -130,12 +127,9 @@ def main():
 
     input_size = [100, 500, 1000, 5000, 10000]
     algorithm = [
-        "rep-insertion",
         "quick-rep-insertion",
         "rep-quick-rep-insertion-1",
-        "rep-quick-rep-insertion-2",
-        "rep-quick-rep-insertion-5",
-        "rep-quick-rep-insertion-10"
+        "rep-quick-rep-insertion-2"
     ]
     config = ["reverse-sorted"]
     seed = range(0, 100)
