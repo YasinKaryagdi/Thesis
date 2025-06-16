@@ -6,7 +6,7 @@ testing_jup.ipynb
 # ignore all approx_input_size dirs
 
 apprx_input_size*
-experiments/results/experiment[123]/runs*
+#experiments/results/experiment[123]/runs*
 
 # ignore coverage report
 .coverage
