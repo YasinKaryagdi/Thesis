@@ -30,7 +30,12 @@ def store_average(input_size, algorithm, config, seed, change_rate, experiment_n
                             run_file_names.append(file_name)
 
                         time_limit = int(math.pow(n, 2))
-                        sample_rate = n / 20
+                        
+                        if experiment_num == 1:
+                            sample_rate = n / 20
+                        else:
+                            sample_rate = n / 10
+
                         results = []
                         for files in run_file_names:
                             # Print statement
@@ -55,7 +60,12 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
         time_limit = int(math.pow(n, 2))
         for c in change_rate:
             plt.figure(figsize=(6, 4))
-            sample_rate = n / 20
+            
+            if experiment_num == 1:
+                sample_rate = n / 20
+            else:
+                sample_rate = n / 10
+
             ax = plt.gca()
             ax.ticklabel_format(style="plain")
 
@@ -138,7 +148,10 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
         time_limit = int(math.pow(n, 2))
         for c in change_rate:
             plt.figure(figsize=(6, 4))
-            sample_rate = n / 20
+            if experiment_num == 1:
+                sample_rate = n / 20
+            else:
+                sample_rate = n / 10
             ax = plt.gca()
             ax.ticklabel_format(style="plain")
 
@@ -187,7 +200,7 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
 
 
 def main():
-    input_size = [1000]
+    input_size = [100, 1000]
     algorithm = ["rep-quick", "block-10", "rep-insertion", "quick-rep-insertion", "rep-quick-rep-insertion-1"]
     config = ["reverse-sorted"]
     seed = range(0, 100)
@@ -209,11 +222,8 @@ def main():
     input_size = [100, 500, 1000]
     algorithm = [
         "rep-insertion",
-        "quick-rep-insertion",
         "rep-quick-rep-insertion-1",
-        "rep-quick-rep-insertion-2",
-        "rep-quick-rep-insertion-5",
-        "rep-quick-rep-insertion-10"
+        "rep-quick-rep-insertion-2"
     ]
     config = ["sorted"]
     seed = range(0, 100)
@@ -248,9 +258,7 @@ def main():
         "rep-insertion",
         "quick-rep-insertion",
         "rep-quick-rep-insertion-1",
-        "rep-quick-rep-insertion-2",
-        "rep-quick-rep-insertion-5",
-        "rep-quick-rep-insertion-10"
+        "rep-quick-rep-insertion-2"
     ]
     config = ["reverse-sorted"]
     seed = range(0, 100)
