@@ -94,48 +94,6 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
             else:
                 ax.legend(loc="upper left")
 
-                if not (experiment_num == 3 and c == 1):
-                    axins = zoomed_inset_axes(ax, zoom=6, loc="lower right")
-                    inset_start = int(time_limit * 0.9)
-                    inset_end = int(time_limit * 0.99)
-                    y_values = []
-
-                    for alg in algorithm:
-                        file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
-                        try:
-                            df = pd.read_excel(
-                                file_name, index_col=0, engine="openpyxl"
-                            )
-
-                            if "temp" in df.columns:
-                                x = df["temp"]
-                                y = df.iloc[:, 0]
-                            else:
-                                x = df.index * sample_rate
-                                y = df.iloc[:, 0]
-
-                            # Limit data to inset x-range
-                            mask = (x >= inset_start) & (x <= inset_end)
-                            axins.plot(x[mask], y[mask], label=alg)
-                            y_values.extend(y[mask].values)
-                        except FileNotFoundError:
-                            continue
-
-                    axins.set_xlim(inset_start, inset_end)
-
-                    if y_values:
-                        y_min = min(y_values)
-                        y_max = max(y_values)
-                        if experiment_num == 1 or experiment_num == 5:
-                            padding = (y_max - y_min) * 1
-                        else:
-                            padding = (y_max - y_min) * 0.1
-                        axins.set_ylim(y_min - padding, y_max + padding)
-
-                    axins.grid(True)
-                    axins.axes.get_xaxis().set_visible(False)
-                    mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
-
             ax.grid(True)
             ax.set_xlim(0, time_limit)
             plot_file = f"experiments/results/experiment{experiment_num}/plots/plot-{n}-{c}.pdf"
@@ -146,7 +104,21 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
 def plot_end_point(input_size, algorithm, change_rate, experiment_num):
     for n in input_size:
         time_limit = int(math.pow(n, 2))
+        
         for c in change_rate:
+            # since the algorithm reach the steady behavior we are only interested,
+            # in what happens at the end
+            if c == 250:
+                amount_of_precentage = 0.4
+            else:
+                if n == 100:
+                    amount_of_precentage = 0.4
+                elif n == 500:
+                    amount_of_precentage = 0.1
+                # FIXME:might cause issues in case the last thing is not 1000 but something else
+                else:
+                    amount_of_precentage = 0.05
+
             plt.figure(figsize=(6, 4))
             if experiment_num == 1:
                 sample_rate = n / 20
@@ -155,7 +127,7 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
             ax = plt.gca()
             ax.ticklabel_format(style="plain")
 
-            inset_start = int(time_limit * 0.9)
+            inset_start = int(time_limit * (1 - amount_of_precentage))
             inset_end = time_limit
             y_values = []
 
@@ -173,7 +145,10 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
 
                     # Limit data to inset x-range
                     mask = (x >= inset_start) & (x <= inset_end)
-                    ax.plot(x[mask], y[mask], label=alg)
+                    line, = ax.plot(x[mask], y[mask], label=alg)
+                    #ax.annotate(f"{alg}", xy=(x[-1], y[-1]), xytext=(x[-1] + 1, y[-1]),    
+                    #ha='left', va='center')
+                    
                     y_values.extend(y[mask].values)
                 except FileNotFoundError:
                     print(f"File not found: {file_name}")
@@ -187,16 +162,71 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
                 y_max = max(y_values)
                 padding = (y_max - y_min) * 0.1 if y_max > y_min else 0.05
                 ax.set_ylim(y_min - padding, y_max + padding)
+            if experiment_num == 1:
+                ax.set_title(f"Zoomed Endpoint (n = {n}, change rate = {c})")
+                ax.set_xlabel("Number of Comparisons")
+                ax.set_ylabel("Average Kendall-Tau Distance")
+                ax.legend().remove()
+            else:
+                ax.legend(loc="upper left")
 
-            ax.set_title(f"Zoomed Endpoint (n = {n}, change rate = {c})")
-            ax.set_xlabel("Number of Comparisons")
-            ax.set_ylabel("Average Kendall-Tau Distance")
-            ax.legend(loc="upper left")
+            
             ax.grid(True)
 
             plot_file = f"experiments/results/experiment{experiment_num}/plots/endpoint-{n}-{c}.pdf"
             plt.savefig(plot_file, bbox_inches="tight", format="pdf")
             plt.close()
+
+
+def average_kendall_tau(input_size, algorithm, change_rate, experiment_num):
+    for n in input_size:
+        time_limit = int(math.pow(n, 2))
+        avg_results = pd.DataFrame(index=algorithm, columns=change_rate)
+
+        for c in change_rate:
+            if c == 250:
+                amount_of_percentage = 0.4
+            else:
+                if n == 100:
+                    amount_of_percentage = 0.4
+                elif n == 500:
+                    amount_of_percentage = 0.1
+                else:
+                    amount_of_percentage = 0.05
+
+            if experiment_num == 1:
+                sample_rate = n / 20
+            else:
+                sample_rate = n / 10
+
+            inset_start = int(time_limit * (1 - amount_of_percentage))
+            inset_end = time_limit
+
+            for alg in algorithm:
+                file_name = f"experiments/results/experiment{experiment_num}/avg/{alg}-{n}-{c}.xlsx"
+                try:
+                    df = pd.read_excel(file_name, index_col=0, engine="openpyxl")
+
+                    if "temp" in df.columns:
+                        x = df["temp"]
+                        y = df.iloc[:, 0]
+                    else:
+                        x = df.index * sample_rate
+                        y = df.iloc[:, 0]
+
+                    mask = (x >= inset_start) & (x <= inset_end)
+                    y_avg = y[mask].mean()
+                    avg_results.at[alg, c] = y_avg
+
+                except FileNotFoundError:
+                    print(f"File not found: {file_name}")
+                    avg_results.at[alg, c] = None  # Or leave as NaN
+
+        output_dir = f"experiments/results/experiment{experiment_num}/avg_tables"
+        os.makedirs(output_dir, exist_ok=True)
+        output_file = f"{output_dir}/average_kendall_tau_n{n}.xlsx"
+        avg_results.to_excel(output_file, engine="openpyxl")
+
 
 
 def main():
@@ -210,6 +240,7 @@ def main():
     plot_figures(input_size, algorithm, change_rate, experiment_num)
     plot_end_point(input_size, algorithm, change_rate, experiment_num)
 
+
     input_size = [100, 500, 1000]
     algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
     config = ["sorted"]
@@ -218,6 +249,8 @@ def main():
     experiment_num = 2
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
+    plot_end_point(input_size, algorithm, change_rate, experiment_num)
+    average_kendall_tau(input_size, algorithm, change_rate, experiment_num)
 
     input_size = [100, 500, 1000]
     algorithm = [
@@ -231,6 +264,8 @@ def main():
     experiment_num = 3
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
+    plot_end_point(input_size, algorithm, change_rate, experiment_num)
+    average_kendall_tau(input_size, algorithm, change_rate, experiment_num)
 
 
     input_size = [100, 500, 1000, 5000, 10000]
