@@ -7,7 +7,6 @@ class Stats:
     
     def __init__(self):
         self.distances = []
-        self.distances2 = []
         self.probes = []
 
     # Adds the current probe and the probes indexes to the list
@@ -17,12 +16,13 @@ class Stats:
 
     # Allows comparison based on the index of int i and j in the real list, 
     # so based on their positions in the real
-    def probe(self, real: list[int], i: int, j: int):
-        index_i = real.index(i)
-        index_j = real.index(j)
+    def probe(self, real: dict, i: int, j: int):
+        index_i = real.get(i)
+        index_j = real.get(j)
         return index_i < index_j
 
-    def merge_sort(self, real: list[int], temp: list[int]):
+
+    def merge_sort(self, real: dict, temp: list[int]):
         if len(temp) <= 1:
             return 0
         
@@ -73,12 +73,13 @@ class Stats:
             k += 1
             j += 1
         
-
         return left_invs + right_invs + between_invs
 
 
     # Adds the current distance between the real order and our approximation
     def add_curr_distance(self, real: list[int], approx: list[int]):
         temp = approx.copy()
-        distance = self.merge_sort(real, temp)
+        real_dict = dict(zip(real, range(0, len(real))))
+
+        distance = self.merge_sort(real_dict, temp)
         self.distances.append(distance)
