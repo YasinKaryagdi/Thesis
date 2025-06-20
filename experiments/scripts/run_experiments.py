@@ -108,7 +108,7 @@ def main():
     )
 
 
-    input_size = [100, 500, 1000] #[100, 500, 1000, 5000, 10000]
+    input_size = [100, 500, 1000, 5000, 10000]
     algorithm = [
         "rep-quick", "block-10", "quick-rep-insertion", "rep-insertion"
     ]
@@ -121,7 +121,7 @@ def main():
         input_size, algorithm, config, seed, change_rate, experiment_num, True
     )
 
-    input_size = [100, 500, 1000] #[100, 500, 1000, 5000, 10000]
+    input_size = [100, 500, 1000, 5000, 10000]
     algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
     config = ["reverse-sorted"]
     seed = range(0, 100)
@@ -131,7 +131,7 @@ def main():
         input_size, algorithm, config, seed, change_rate, experiment_num, True
     )
 
-    input_size = [100, 500, 1000] #[100, 500, 1000, 5000, 10000]
+    input_size = [100, 500, 1000, 5000, 10000]
     algorithm = [
         "quick-rep-insertion",
         "rep-quick-rep-insertion-1",
