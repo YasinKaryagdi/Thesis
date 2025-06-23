@@ -276,7 +276,7 @@ def main():
     seed = range(0, 30)
     change_rate = [1, 2, 10]
     experiment_num = 4
-    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
-    plot_figures(input_size, algorithm, change_rate, experiment_num)
+    #store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
+    #plot_figures(input_size, algorithm, change_rate, experiment_num)
 
 main()

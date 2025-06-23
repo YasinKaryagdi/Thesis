@@ -17,7 +17,7 @@ def run_single_experiment(args):
 
     # Check if file already exists
     if os.path.exists(file_name):
-        print(f"Skipped (already exists): {file_name}")
+        # print(f"Skipped (already exists): {file_name}")
         return
 
     time_limit = int(math.pow(n, 2))
@@ -66,7 +66,7 @@ def run_experiment_parallel(
         os.makedirs(sub_dir)
 
     # Use all available CPU cores
-    num_processes = cpu_count() -1
+    num_processes = cpu_count()
     with Pool(processes=num_processes) as pool:
         pool.map(run_single_experiment, tasks)
 
@@ -101,7 +101,7 @@ def main():
     ]
     config = ["sorted"]
     seed = range(0, 100)
-    change_rate = [1, 5, 10, 20, 250]
+    change_rate = [1, 5, 10, 20]
     experiment_num = 3
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
