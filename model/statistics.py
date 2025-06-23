@@ -13,7 +13,6 @@ class Stats:
     def add_probe(self, i, j):
         self.probes.append([i, j])
 
-
     # Allows comparison based on the index of int i and j in the real list, 
     # so based on their positions in the real
     def probe(self, real: dict, i: int, j: int):

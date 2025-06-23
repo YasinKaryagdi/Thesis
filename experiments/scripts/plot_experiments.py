@@ -276,8 +276,8 @@ def main():
     seed = range(0, 100)
     change_rate = [1, 2, 10]
     experiment_num = 4
-    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
-    plot_figures(input_size, algorithm, change_rate, experiment_num)
+    #store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
+    #plot_figures(input_size, algorithm, change_rate, experiment_num)
 
     input_size = [100, 500, 1000, 5000, 10000]
     algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
@@ -285,8 +285,8 @@ def main():
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
     experiment_num = 5
-    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
-    plot_figures(input_size, algorithm, change_rate, experiment_num)
+    #store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
+    #plot_figures(input_size, algorithm, change_rate, experiment_num)
 
     input_size = [100, 500, 1000, 5000, 10000]
     algorithm = [
@@ -299,6 +299,20 @@ def main():
     seed = range(0, 100)
     change_rate = [1, 5, 10, 20]
     experiment_num = 6
+    #store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
+    #plot_figures(input_size, algorithm, change_rate, experiment_num)
+
+    input_size = [100, 500, 1000]
+    algorithm = [
+        "quick-rep-insertion",
+        "rep-quick-rep-insertion-1",
+        "rep-quick-rep-insertion-2",
+        "rep-quick"
+    ]
+    config = ["reverse-sorted"]
+    seed = range(0, 1)
+    change_rate = [1, 5]
+    experiment_num = 7
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
 
