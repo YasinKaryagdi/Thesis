@@ -80,7 +80,6 @@ def plot_figures(input_size, algorithm, change_rate, experiment_num):
                     else:
                         x = df.index * sample_rate
                         y = df.iloc[:, 0]
-
                     ax.plot(x, y, label=alg)
                 except FileNotFoundError:
                     print(f"File not found: {file_name}")
@@ -168,7 +167,7 @@ def plot_end_point(input_size, algorithm, change_rate, experiment_num):
                 ax.set_ylabel("Average Kendall-Tau Distance")
                 ax.legend().remove()
             else:
-                ax.legend(loc="upper left")
+                ax.legend().remove()
 
             
             ax.grid(True)
@@ -254,6 +253,7 @@ def main():
 
     input_size = [100, 500, 1000]
     algorithm = [
+        "rep-quick",
         "rep-insertion",
         "rep-quick-rep-insertion-1",
         "rep-quick-rep-insertion-2"
@@ -273,32 +273,9 @@ def main():
         "rep-quick", "block-10", "quick-rep-insertion", "rep-insertion"
     ]
     config = ["reverse-sorted"]
-    seed = range(0, 100)
+    seed = range(0, 30)
     change_rate = [1, 2, 10]
     experiment_num = 4
-    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
-    plot_figures(input_size, algorithm, change_rate, experiment_num)
-
-    input_size = [100, 500, 1000, 5000, 10000]
-    algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
-    config = ["reverse-sorted"]
-    seed = range(0, 100)
-    change_rate = [1, 5, 10, 20]
-    experiment_num = 5
-    store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
-    plot_figures(input_size, algorithm, change_rate, experiment_num)
-
-    input_size = [100, 500, 1000, 5000, 10000]
-    algorithm = [
-        "rep-insertion",
-        "quick-rep-insertion",
-        "rep-quick-rep-insertion-1",
-        "rep-quick-rep-insertion-2"
-    ]
-    config = ["reverse-sorted"]
-    seed = range(0, 100)
-    change_rate = [1, 5, 10, 20]
-    experiment_num = 6
     store_average(input_size, algorithm, config, seed, change_rate, experiment_num)
     plot_figures(input_size, algorithm, change_rate, experiment_num)
 

@@ -113,35 +113,10 @@ def main():
         "rep-quick", "block-10", "quick-rep-insertion", "rep-insertion"
     ]
     config = ["reverse-sorted"]
-    seed = range(0, 100)
+    seed = range(0, 30)
     change_rate = [1, 2, 10]
     experiment_num = 4
     
-    run_experiment_parallel(
-        input_size, algorithm, config, seed, change_rate, experiment_num, True
-    )
-
-    input_size = [100, 500, 1000, 5000, 10000]
-    algorithm = ["block-1", "block-5", "block-10", "block-20", "block-40"]
-    config = ["reverse-sorted"]
-    seed = range(0, 100)
-    change_rate = [1, 5, 10, 20]
-    experiment_num = 5
-    run_experiment_parallel(
-        input_size, algorithm, config, seed, change_rate, experiment_num, True
-    )
-
-    input_size = [100, 500, 1000, 5000, 10000]
-    algorithm = [
-        "quick-rep-insertion",
-        "rep-quick-rep-insertion-1",
-        "rep-quick-rep-insertion-2",
-        "rep-quick"
-    ]
-    config = ["reverse-sorted"]
-    seed = range(0, 100)
-    change_rate = [1, 5, 10, 20]
-    experiment_num = 6
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num, True
     )
