@@ -101,14 +101,18 @@ def main():
     ]
     config = ["sorted"]
     seed = range(0, 100)
-    change_rate = [1, 5, 10, 20]
+    change_rate = [1, 5, 10, 20, 250]
     experiment_num = 3
     run_experiment_parallel(
         input_size, algorithm, config, seed, change_rate, experiment_num
     )
 
 
-    input_size = [100, 500, 1000, 5000, 10000]
+    input_size = [1000, 2000, 3000, 5000, 10000]
+
+    for i in range(100, 1000, 100):
+        input_size.append(i)
+
     algorithm = [
         "rep-quick", "block-10", "quick-rep-insertion", "rep-insertion"
     ]
