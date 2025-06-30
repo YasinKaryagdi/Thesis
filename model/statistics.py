@@ -14,18 +14,23 @@ class Stats:
         self.probes.append([i, j])
 
     # Allows comparison based on the index of int i and j in the real list, 
-    # so based on their positions in the real
+    # so based on their positions in the real list,
+    # no changes are made to the real list
     def probe(self, real: dict, i: int, j: int):
         index_i = real.get(i)
         index_j = real.get(j)
         return index_i < index_j
 
-
+    # Merge sort that counts the number of inversions in the list,
+    # which is the number of discordant pairs in the current approximation,
+    # to this end we give access to the real list as a dictionary,
+    # where the keys are the integers and the values are their indices in the real list
     def merge_sort(self, real: dict, temp: list[int]):
         if len(temp) <= 1:
             return 0
         
-        # essentially splitting the list like mozes split the seas
+        # Splitting the list into the left and right halves
+        # and recursively sorting them
         left_size = len(temp) // 2
         right_size = len(temp) - left_size
 

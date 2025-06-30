@@ -175,7 +175,7 @@ def stack_quicksort_run_step(
 def blocked_quicksort(list: DynamicList, time_limit: int, block_constant: int):
     n = list.size()
 
-    # Determine block size m close to 10 * ln(n)
+    # Determine block size m close to block_constant * ln(n)
     m = int(block_constant * math.log(n))
     if m % 2 == 1:
         m += 1
